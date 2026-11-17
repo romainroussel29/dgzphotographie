@@ -3,6 +3,8 @@
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import InstagramIcon from './InstagramIcon';
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '@/lib/contact';
 
 const links = [
   { href: '/galerie', label: 'Galeries' },
@@ -31,7 +33,16 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
         <div className="max-w-7xl mx-auto px-5 md:px-10 h-9 flex items-center justify-between kicker text-white/50">
           <span>Marseille</span>
           <span className="hidden sm:inline">Portrait · Street · Paysage</span>
-          <span>Noir &amp; blanc</span>
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 hover:text-paper transition"
+            aria-label="Instagram (nouvel onglet)"
+          >
+            <InstagramIcon className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Instagram</span>
+          </a>
         </div>
       </div>
 
@@ -87,6 +98,14 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
               {l.label}
             </Link>
           ))}
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-3 kicker text-white/70"
+          >
+            <InstagramIcon /> @{INSTAGRAM_HANDLE}
+          </a>
         </nav>
       )}
     </header>

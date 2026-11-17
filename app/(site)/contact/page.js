@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import InstagramIcon from '@/app/components/InstagramIcon';
+import { EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_LINK } from '@/lib/contact';
 
 const inputClass =
   'w-full bg-paper border border-line px-4 py-3.5 text-[15px] text-ink placeholder:text-muted/60 focus:outline-none focus:border-ink transition';
@@ -31,10 +34,27 @@ export default function ContactPage() {
 
           <dl className="border-t border-ink">
             <div className="flex justify-between gap-4 py-4 border-b border-line">
+              <dt className="kicker text-muted">Téléphone</dt>
+              <dd>
+                <a href={PHONE_LINK} className="hover:underline underline-offset-4">{PHONE_DISPLAY}</a>
+              </dd>
+            </div>
+            <div className="flex justify-between gap-4 py-4 border-b border-line">
               <dt className="kicker text-muted">Email</dt>
               <dd>
-                <a href="mailto:contact@dgz-photographie.com" className="hover:underline underline-offset-4 break-all">
-                  contact@dgz-photographie.com
+                <a href={`mailto:${EMAIL}`} className="hover:underline underline-offset-4 break-all">{EMAIL}</a>
+              </dd>
+            </div>
+            <div className="flex justify-between gap-4 py-4 border-b border-line">
+              <dt className="kicker text-muted">Instagram</dt>
+              <dd>
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 hover:underline underline-offset-4"
+                >
+                  <InstagramIcon />@{INSTAGRAM_HANDLE}
                 </a>
               </dd>
             </div>
@@ -91,6 +111,13 @@ export default function ContactPage() {
               <button type="submit" className="w-full bg-ink text-paper py-4 kicker hover:bg-black transition">
                 Envoyer le message →
               </button>
+              <p className="text-xs text-muted leading-relaxed">
+                Les informations saisies servent uniquement à répondre à votre demande. Voir la{' '}
+                <Link href="/confidentialite" className="underline underline-offset-2 hover:text-ink">
+                  politique de confidentialité
+                </Link>
+                .
+              </p>
             </form>
           )}
         </div>
