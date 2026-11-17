@@ -7,6 +7,8 @@ import { supabase } from '@/lib/supabase';
 type Gallery = { id: string; title: string };
 type Photo = { id: string; url: string; name: string | null };
 
+const num = (n: number) => String(n).padStart(2, '0');
+
 export default function GalleryView({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [gallery, setGallery] = useState<Gallery | null>(null);
@@ -64,109 +66,91 @@ export default function GalleryView({ params }: { params: Promise<{ id: string }
   }, [current, close, prev, next]);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-24">
-      <Link
-        href="/galerie"
-        className="inline-block text-[11px] uppercase tracking-[0.25em] text-neutral-500 hover:text-white transition mb-10"
-      >
-        ← Toutes les galeries
+    <div className="max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-20">
+      <Link href="/galerie" className="kicker text-muted hover:text-ink transition">
+        ← Index des galeries
       </Link>
 
-      <header className="mb-14 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-neutral-900 pb-10 animate-fade-up">
-        <h1 className="font-serif font-light text-5xl md:text-7xl text-white leading-none">
+      <header className="mt-8 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-ink pb-6 animate-rise">
+        <h1 className="font-serif text-6xl md:text-8xl leading-none tracking-tight">
           {loading ? '…' : gallery?.title ?? 'Galerie introuvable'}
         </h1>
         {!loading && photos.length > 0 && (
-          <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-500">
-            {photos.length} photographie{photos.length > 1 ? 's' : ''}
+          <p className="kicker text-muted">
+            {num(photos.length)} photographie{photos.length > 1 ? 's' : ''}
           </p>
         )}
       </header>
 
       {loading ? (
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
-          {[320, 420, 280, 380, 300, 400].map((h, i) => (
-            <div key={i} className="mb-6 bg-neutral-900 animate-pulse" style={{ height: h }} />
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="aspect-[4/5] bg-paper-deep animate-pulse" />
           ))}
         </div>
       ) : photos.length === 0 ? (
-        <p className="text-sm text-neutral-500 font-light text-center py-24 border border-dashed border-neutral-800">
-          Aucune photo dans cette galerie pour le moment.
-        </p>
+        <p className="py-24 text-center text-muted">Aucune photo dans cette galerie pour le moment.</p>
       ) : (
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-8 gap-y-12">
           {photos.map((photo, i) => (
-            <button
-              key={photo.id}
-              type="button"
-              onClick={() => setCurrent(i)}
-              className="group relative block w-full mb-6 break-inside-avoid overflow-hidden bg-neutral-900 cursor-zoom-in"
-              aria-label={`Agrandir la photo ${i + 1}`}
-            >
-              <img
-                src={photo.url}
-                alt={photo.name || `${gallery?.title ?? 'Photo'} ${i + 1}`}
-                loading="lazy"
-                className="w-full h-auto grayscale transition duration-[1200ms] ease-out group-hover:scale-[1.03]"
-              />
-            </button>
+            <figure key={photo.id}>
+              <button
+                type="button"
+                onClick={() => setCurrent(i)}
+                className="group block w-full aspect-[4/5] bg-paper-deep overflow-hidden cursor-zoom-in"
+                aria-label={`Agrandir la photo ${i + 1}`}
+              >
+                <img
+                  src={photo.url}
+                  alt={photo.name || `${gallery?.title ?? 'Photo'} ${i + 1}`}
+                  loading="lazy"
+                  className="w-full h-full object-cover grayscale transition duration-700 group-hover:scale-[1.03]"
+                />
+              </button>
+              <figcaption className="mt-3 flex justify-between kicker text-muted">
+                <span>Pl. {num(i + 1)}</span>
+                <span>{gallery?.title}</span>
+              </figcaption>
+            </figure>
           ))}
         </div>
       )}
 
       {current !== null && photos[current] && (
         <div
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center animate-fade-up"
+          className="fixed inset-0 z-50 bg-paper flex flex-col animate-rise"
           role="dialog"
           aria-modal="true"
           aria-label="Visionneuse"
-          onClick={close}
         >
-          <img
-            src={photos[current].url}
-            alt={photos[current].name || ''}
-            className="max-h-[85vh] max-w-[90vw] object-contain grayscale shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
+          <div className="flex items-center justify-between px-5 md:px-10 h-16 border-b border-line kicker">
+            <span>
+              {gallery?.title} — Pl. {num(current + 1)} / {num(photos.length)}
+            </span>
+            <button type="button" onClick={close} className="hover:underline underline-offset-4">
+              Fermer ✕
+            </button>
+          </div>
 
-          <button
-            type="button"
-            onClick={close}
-            className="absolute top-6 right-6 text-[11px] uppercase tracking-[0.3em] text-neutral-400 hover:text-white transition"
-          >
-            Fermer ✕
-          </button>
+          <div className="relative flex-1 flex items-center justify-center p-6 md:p-12 min-h-0" onClick={close}>
+            <img
+              src={photos[current].url}
+              alt={photos[current].name || ''}
+              className="max-h-full max-w-full object-contain grayscale"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
 
           {photos.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  prev();
-                }}
-                className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 p-4 text-3xl font-light text-neutral-500 hover:text-white transition"
-                aria-label="Photo précédente"
-              >
-                ‹
+            <div className="flex justify-between px-5 md:px-10 h-16 items-center border-t border-line kicker">
+              <button type="button" onClick={prev} className="hover:underline underline-offset-4">
+                ← Précédente
               </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  next();
-                }}
-                className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 p-4 text-3xl font-light text-neutral-500 hover:text-white transition"
-                aria-label="Photo suivante"
-              >
-                ›
+              <button type="button" onClick={next} className="hover:underline underline-offset-4">
+                Suivante →
               </button>
-            </>
+            </div>
           )}
-
-          <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[11px] tracking-[0.3em] text-neutral-500">
-            {current + 1} / {photos.length}
-          </p>
         </div>
       )}
     </div>

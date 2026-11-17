@@ -2,37 +2,35 @@ import Link from 'next/link';
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-neutral-900 mt-auto">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-14 grid gap-10 md:grid-cols-3 items-start">
-        <div>
-          <p className="font-serif text-2xl tracking-[0.2em] text-white">DGZ</p>
-          <p className="mt-2 text-xs text-neutral-500 tracking-wider leading-relaxed">
-            Portrait authentique en noir et blanc.
-            <br />
-            Basé à Marseille.
+    <footer className="mt-auto bg-ink text-paper">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 pt-16 pb-8">
+        <div className="grid gap-10 md:grid-cols-3 pb-14 border-b border-white/15">
+          <p className="font-serif italic text-2xl leading-snug max-w-xs">
+            « Je ne cherche pas le portrait parfait. Je cherche le portrait juste. »
           </p>
+          <nav className="flex flex-col gap-3 kicker text-white/60" aria-label="Pied de page">
+            <Link href="/galerie" className="hover:text-white transition w-fit">Galeries</Link>
+            <Link href="/commentaires" className="hover:text-white transition w-fit">Livre d&apos;or</Link>
+            <Link href="/contact" className="hover:text-white transition w-fit">Contact</Link>
+          </nav>
+          <div className="md:text-right">
+            <p className="kicker text-white/50 mb-3">Écrire</p>
+            <a href="mailto:contact@dgz-photographie.com" className="text-lg hover:underline underline-offset-4">
+              contact@dgz-photographie.com
+            </a>
+          </div>
         </div>
 
-        <nav className="flex flex-col gap-3 text-[11px] uppercase tracking-[0.25em] text-neutral-400" aria-label="Pied de page">
-          <Link href="/galerie" className="hover:text-white transition w-fit">Galeries</Link>
-          <Link href="/commentaires" className="hover:text-white transition w-fit">Livre d&apos;or</Link>
-          <Link href="/contact" className="hover:text-white transition w-fit">Contact</Link>
-        </nav>
+        <p
+          className="font-serif leading-none tracking-tighter text-center select-none py-6 text-[22vw] md:text-[17vw] lg:text-[15rem]"
+          aria-hidden
+        >
+          DGZ
+        </p>
 
-        <div className="md:text-right">
-          <a
-            href="mailto:contact@dgz-photographie.com"
-            className="text-sm text-neutral-300 hover:text-white transition border-b border-neutral-700 hover:border-white pb-0.5"
-          >
-            contact@dgz-photographie.com
-          </a>
-        </div>
-      </div>
-
-      <div className="border-t border-neutral-900">
-        <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 flex flex-col sm:flex-row gap-3 justify-between text-[10px] uppercase tracking-[0.25em] text-neutral-600">
-          <span>© 2026 DGZ Photographie — Tous droits réservés</span>
-          <Link href="/admin/login" className="hover:text-neutral-400 transition">Espace admin</Link>
+        <div className="flex flex-col sm:flex-row gap-3 justify-between kicker text-white/40">
+          <span>© 2026 DGZ Photographie</span>
+          <Link href="/admin/login" className="hover:text-white/80 transition">Espace admin</Link>
         </div>
       </div>
     </footer>

@@ -3,8 +3,8 @@
 import { useState } from 'react';
 
 const inputClass =
-  'w-full bg-transparent border-0 border-b border-neutral-800 px-0 py-3 text-base text-white placeholder:text-neutral-700 focus:outline-none focus:border-white transition';
-const labelClass = 'block text-[10px] uppercase tracking-[0.3em] text-neutral-500';
+  'w-full bg-paper border border-line px-4 py-3.5 text-[15px] text-ink placeholder:text-muted/60 focus:outline-none focus:border-ink transition';
+const labelClass = 'kicker block mb-2';
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -15,61 +15,65 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-24">
-      <div className="grid md:grid-cols-12 gap-16 md:gap-12">
-        {/* Colonne d'information */}
-        <aside className="md:col-span-5 animate-fade-up">
-          <p className="text-[11px] uppercase tracking-[0.35em] text-neutral-500 mb-6">Contact</p>
-          <h1 className="font-serif font-light text-5xl md:text-7xl text-white leading-none">
-            Écrivez-moi.
-          </h1>
-          <p className="mt-8 text-neutral-400 font-light leading-relaxed max-w-sm">
-            Une question, un projet de collaboration ou une demande de tirage&nbsp;? N&apos;hésitez pas à m&apos;écrire.
+    <div className="max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-20">
+      <header className="border-b border-ink pb-6 mb-14 animate-rise">
+        <h1 className="font-serif text-6xl md:text-8xl leading-none tracking-tight">Contact</h1>
+      </header>
+
+      <div className="grid md:grid-cols-12 gap-14 md:gap-10">
+        <aside className="md:col-span-4 space-y-10">
+          <p className="font-serif italic text-3xl leading-snug">
+            Une question, un projet de collaboration ou une demande de tirage&nbsp;?
+          </p>
+          <p className="text-muted leading-relaxed">
+            N&apos;hésitez pas à m&apos;écrire. Je réponds personnellement à chaque message.
           </p>
 
-          <dl className="mt-14 space-y-8 border-t border-neutral-900 pt-10">
-            <div>
-              <dt className={labelClass}>Email</dt>
-              <dd className="mt-2">
-                <a
-                  href="mailto:contact@dgz-photographie.com"
-                  className="text-neutral-200 hover:text-white border-b border-neutral-700 hover:border-white pb-0.5 transition"
-                >
+          <dl className="border-t border-ink">
+            <div className="flex justify-between gap-4 py-4 border-b border-line">
+              <dt className="kicker text-muted">Email</dt>
+              <dd>
+                <a href="mailto:contact@dgz-photographie.com" className="hover:underline underline-offset-4 break-all">
                   contact@dgz-photographie.com
                 </a>
               </dd>
             </div>
-            <div>
-              <dt className={labelClass}>Studio</dt>
-              <dd className="mt-2 text-neutral-200">Marseille &amp; alentours</dd>
+            <div className="flex justify-between gap-4 py-4 border-b border-line">
+              <dt className="kicker text-muted">Lieu</dt>
+              <dd>Marseille &amp; alentours</dd>
+            </div>
+            <div className="flex justify-between gap-4 py-4 border-b border-line">
+              <dt className="kicker text-muted">Spécialité</dt>
+              <dd>Portrait noir &amp; blanc</dd>
             </div>
           </dl>
         </aside>
 
-        {/* Formulaire */}
-        <div className="md:col-span-6 md:col-start-7">
+        <div className="md:col-span-7 md:col-start-6">
           {submitted ? (
-            <div className="border border-neutral-800 p-10 md:p-14 animate-fade-up">
-              <p className="font-serif italic text-3xl text-white">Merci.</p>
-              <p className="mt-4 text-neutral-400 font-light leading-relaxed">
+            <div className="bg-ink text-paper p-10 md:p-16 animate-rise">
+              <p className="font-serif italic text-5xl">Merci.</p>
+              <p className="mt-6 text-white/70 leading-relaxed max-w-md">
                 Votre message a bien été pris en compte. Je vous répondrai dans les plus brefs délais.
               </p>
               <button
                 onClick={() => setSubmitted(false)}
-                className="mt-10 text-[11px] uppercase tracking-[0.25em] text-neutral-300 hover:text-white border-b border-neutral-700 hover:border-white pb-1 transition"
+                className="mt-10 kicker border border-white/40 px-5 py-3 hover:bg-paper hover:text-ink transition"
               >
                 Envoyer un autre message
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-10">
-              <div className="grid sm:grid-cols-2 gap-10">
+            <form onSubmit={handleSubmit} className="bg-paper-deep p-6 md:p-10 space-y-6">
+              <div className="grid sm:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="nom" className={labelClass}>Nom</label>
                   <input id="nom" type="text" required autoComplete="name" className={inputClass} placeholder="Votre nom" />
                 </div>
                 <div>
-                  <label htmlFor="tel" className={labelClass}>Téléphone <span className="normal-case tracking-normal text-neutral-700">(optionnel)</span></label>
+                  <label htmlFor="tel" className={labelClass}>
+                    Téléphone <span className="normal-case tracking-normal font-normal text-muted">(optionnel)</span>
+                  </label>
                   <input id="tel" type="tel" autoComplete="tel" className={inputClass} placeholder="06 12 34 56 78" />
                 </div>
               </div>
@@ -81,15 +85,11 @@ export default function ContactPage() {
 
               <div>
                 <label htmlFor="message" className={labelClass}>Message</label>
-                <textarea id="message" rows={6} required className={`${inputClass} resize-none`} placeholder="Parlez-moi de votre projet…" />
+                <textarea id="message" rows={7} required className={`${inputClass} resize-none`} placeholder="Parlez-moi de votre projet…" />
               </div>
 
-              <button
-                type="submit"
-                className="group inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-[11px] uppercase tracking-[0.25em] hover:bg-neutral-200 transition"
-              >
-                Envoyer le message
-                <span className="transition-transform group-hover:translate-x-1">→</span>
+              <button type="submit" className="w-full bg-ink text-paper py-4 kicker hover:bg-black transition">
+                Envoyer le message →
               </button>
             </form>
           )}

@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
 const inputClass =
-  'w-full bg-transparent border-0 border-b border-neutral-800 px-0 py-3 text-base text-white placeholder:text-neutral-700 focus:outline-none focus:border-white transition';
-const labelClass = 'block text-[10px] uppercase tracking-[0.3em] text-neutral-500';
+  'w-full bg-paper border border-line px-4 py-3.5 text-[15px] text-ink placeholder:text-muted/60 focus:outline-none focus:border-ink transition';
+const labelClass = 'kicker block mb-2';
 
 export default function CommentairesPage() {
   const [comments, setComments] = useState([]);
@@ -17,19 +17,19 @@ export default function CommentairesPage() {
 
   useEffect(() => {
     const fetchComments = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('comments')
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        const { data, error } = await supabase
+          .from('comments')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setComments(data || []);
-    } catch (error) {
-      console.error('Erreur lors du chargement des commentaires:', error.message);
-    } finally {
-      setLoading(false);
-    }
+        if (error) throw error;
+        setComments(data || []);
+      } catch (error) {
+        console.error('Erreur lors du chargement des commentaires:', error.message);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchComments();
   }, []);
@@ -67,30 +67,69 @@ export default function CommentairesPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-24">
-      <header className="mb-16 md:mb-24 animate-fade-up">
-        <p className="text-[11px] uppercase tracking-[0.35em] text-neutral-500 mb-6">Livre d&apos;or</p>
-        <h1 className="font-serif font-light text-5xl md:text-7xl text-white leading-none">Vos mots.</h1>
-        <p className="mt-8 text-neutral-400 font-light leading-relaxed max-w-lg">
+    <div className="max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-20">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-ink pb-6 mb-14 animate-rise">
+        <h1 className="font-serif text-6xl md:text-8xl leading-none tracking-tight">
+          Livre <em>d&apos;or</em>
+        </h1>
+        <p className="max-w-sm text-sm text-muted md:text-right">
           Laissez un commentaire, une impression ou un mot sur l&apos;univers photographique.
         </p>
       </header>
 
-      <div className="grid md:grid-cols-12 gap-16 md:gap-12">
+      <div className="grid md:grid-cols-12 gap-14 md:gap-10">
+        {/* Messages */}
+        <section className="md:col-span-8 order-2 md:order-1">
+          <p className="kicker text-muted mb-8">
+            {loading ? 'Chargement…' : `${comments.length} message${comments.length > 1 ? 's' : ''}`}
+          </p>
+
+          {loading ? (
+            <div className="grid sm:grid-cols-2 gap-6" aria-busy="true">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="h-40 bg-paper-deep animate-pulse" />
+              ))}
+            </div>
+          ) : comments.length === 0 ? (
+            <p className="py-16 text-center text-muted border border-dashed border-line">
+              Aucun commentaire pour le moment. Soyez le premier à laisser un mot&nbsp;!
+            </p>
+          ) : (
+            <ul className="sm:columns-2 gap-6">
+              {comments.map((comment) => (
+                <li key={comment.id} className="break-inside-avoid mb-6 bg-paper-deep p-7">
+                  <span className="font-serif text-5xl leading-none text-line" aria-hidden>“</span>
+                  <p className="-mt-2 font-serif text-xl leading-relaxed">{comment.content}</p>
+                  <div className="mt-6 pt-4 border-t border-line flex justify-between gap-4 kicker">
+                    <span>{comment.author}</span>
+                    <span className="text-muted font-normal">
+                      {new Date(comment.created_at).toLocaleDateString('fr-FR', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
         {/* Formulaire */}
-        <div className="md:col-span-5">
-          <div className="md:sticky md:top-28">
-            <h2 className="text-[11px] uppercase tracking-[0.3em] text-neutral-300 mb-8">Laisser un message</h2>
+        <aside className="md:col-span-4 order-1 md:order-2">
+          <div className="md:sticky md:top-8 border border-ink p-6 md:p-8">
+            <h2 className="font-serif text-3xl">Laisser un mot</h2>
 
             {successMessage && (
-              <p className="mb-8 border-l border-white pl-4 text-sm text-neutral-300 font-light animate-fade-up" role="status">
+              <p className="mt-4 bg-ink text-paper px-4 py-3 text-sm animate-rise" role="status">
                 Merci&nbsp;! Votre commentaire a bien été publié.
               </p>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-10">
+            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
               <div>
-                <label htmlFor="author" className={labelClass}>Votre nom / pseudo</label>
+                <label htmlFor="author" className={labelClass}>Nom / pseudo</label>
                 <input
                   id="author"
                   type="text"
@@ -103,10 +142,10 @@ export default function CommentairesPage() {
               </div>
 
               <div>
-                <label htmlFor="content" className={labelClass}>Votre commentaire</label>
+                <label htmlFor="content" className={labelClass}>Commentaire</label>
                 <textarea
                   id="content"
-                  rows={4}
+                  rows={5}
                   required
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
@@ -118,58 +157,13 @@ export default function CommentairesPage() {
               <button
                 type="submit"
                 disabled={sending}
-                className="group inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-[11px] uppercase tracking-[0.25em] hover:bg-neutral-200 transition disabled:opacity-50"
+                className="w-full bg-ink text-paper py-4 kicker hover:bg-black transition disabled:opacity-50"
               >
-                {sending ? 'Publication…' : 'Publier'}
-                <span className="transition-transform group-hover:translate-x-1">→</span>
+                {sending ? 'Publication…' : 'Publier →'}
               </button>
             </form>
           </div>
-        </div>
-
-        {/* Liste des commentaires */}
-        <section className="md:col-span-6 md:col-start-7">
-          <h2 className="text-[11px] uppercase tracking-[0.3em] text-neutral-500 mb-8 pb-4 border-b border-neutral-900">
-            Messages ({comments.length})
-          </h2>
-
-          {loading ? (
-            <div className="space-y-10" aria-busy="true">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="space-y-3">
-                  <div className="h-4 w-1/3 bg-neutral-900 animate-pulse" />
-                  <div className="h-3 w-full bg-neutral-900 animate-pulse" />
-                  <div className="h-3 w-2/3 bg-neutral-900 animate-pulse" />
-                </div>
-              ))}
-            </div>
-          ) : comments.length === 0 ? (
-            <p className="text-sm text-neutral-500 font-light py-12">
-              Aucun commentaire pour le moment. Soyez le premier à laisser un mot&nbsp;!
-            </p>
-          ) : (
-            <ul className="divide-y divide-neutral-900">
-              {comments.map((comment) => (
-                <li key={comment.id} className="py-8 first:pt-0">
-                  <p className="font-serif font-light text-xl md:text-2xl leading-relaxed text-neutral-200">
-                    « {comment.content} »
-                  </p>
-                  <div className="mt-4 flex items-center gap-3 text-[10px] uppercase tracking-[0.25em]">
-                    <span className="text-neutral-300">{comment.author}</span>
-                    <span className="w-6 h-px bg-neutral-700" aria-hidden />
-                    <span className="text-neutral-600">
-                      {new Date(comment.created_at).toLocaleDateString('fr-FR', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        </aside>
       </div>
     </div>
   );

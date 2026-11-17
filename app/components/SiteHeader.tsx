@@ -5,64 +5,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const links = [
-  { href: '/', label: 'Accueil' },
   { href: '/galerie', label: 'Galeries' },
   { href: '/commentaires', label: "Livre d'or" },
   { href: '/contact', label: 'Contact' },
 ];
 
 function isActive(pathname: string | null, href: string) {
-  if (!pathname) return false;
-  return href === '/' ? pathname === '/' : pathname.startsWith(href);
-}
-
-function NavLinks({
-  pathname,
-  onNavigate,
-  mobile = false,
-}: {
-  pathname: string | null;
-  onNavigate?: () => void;
-  mobile?: boolean;
-}) {
-  return (
-    <>
-      {links.map((link) => {
-        const active = isActive(pathname, link.href);
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={onNavigate}
-            aria-current={active ? 'page' : undefined}
-            className={
-              mobile
-                ? `font-serif text-4xl font-light transition ${active ? 'text-white' : 'text-neutral-500 hover:text-white'}`
-                : `relative py-1 text-[11px] uppercase tracking-[0.25em] transition after:absolute after:left-0 after:-bottom-0.5 after:h-px after:bg-white after:transition-all after:duration-500 ${
-                    active
-                      ? 'text-white after:w-full'
-                      : 'text-neutral-400 hover:text-white after:w-0 hover:after:w-full'
-                  }`
-            }
-          >
-            {link.label}
-          </Link>
-        );
-      })}
-    </>
-  );
+  return !!pathname && pathname.startsWith(href);
 }
 
 function HeaderInner({ pathname }: { pathname: string | null }) {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -72,46 +25,85 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
   }, [open]);
 
   return (
-    <header
-      className={`sticky top-0 z-40 transition-colors duration-500 ${
-        scrolled || open
-          ? 'bg-neutral-950/85 backdrop-blur-md border-b border-neutral-900'
-          : 'bg-transparent border-b border-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 h-20">
-        <Link href="/" onClick={() => setOpen(false)} className="group flex items-baseline gap-3">
-          <span className="font-serif text-2xl tracking-[0.2em] text-white">DGZ</span>
-          <span className="hidden sm:inline text-[10px] uppercase tracking-[0.35em] text-neutral-500 group-hover:text-neutral-300 transition">
-            Photographie
-          </span>
+    <header className="relative z-40 bg-paper">
+      {/* Bandeau supérieur */}
+      <div className="border-b border-line">
+        <div className="max-w-7xl mx-auto px-5 md:px-10 h-9 flex items-center justify-between kicker text-muted">
+          <span>Marseille</span>
+          <span className="hidden sm:inline">Portrait · Street · Paysage</span>
+          <span>Noir &amp; blanc</span>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-5 md:px-10 py-6 md:py-8 grid grid-cols-3 items-center">
+        <nav className="hidden md:flex gap-8" aria-label="Navigation principale">
+          {links.slice(0, 2).map((l) => (
+            <NavItem key={l.href} {...l} active={isActive(pathname, l.href)} />
+          ))}
+        </nav>
+
+        <Link
+          href="/"
+          onClick={() => setOpen(false)}
+          className="col-start-2 justify-self-center text-center leading-none"
+        >
+          <span className="block font-serif text-4xl md:text-5xl tracking-tight">DGZ</span>
+          <span className="block kicker text-muted mt-2">Photographie</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-10" aria-label="Navigation principale">
-          <NavLinks pathname={pathname} />
-        </nav>
+        <div className="hidden md:flex justify-end">
+          <Link
+            href="/contact"
+            aria-current={isActive(pathname, '/contact') ? 'page' : undefined}
+            className="kicker border border-ink px-5 py-3 hover:bg-ink hover:text-paper transition"
+          >
+            Réserver une séance
+          </Link>
+        </div>
 
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5"
-          aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
+          className="md:hidden col-start-3 justify-self-end kicker"
           aria-expanded={open}
         >
-          <span className={`block h-px w-6 bg-white transition duration-300 ${open ? 'translate-y-[3.5px] rotate-45' : ''}`} />
-          <span className={`block h-px w-6 bg-white transition duration-300 ${open ? '-translate-y-[3.5px] -rotate-45' : ''}`} />
+          {open ? 'Fermer' : 'Menu'}
         </button>
       </div>
 
+      <div className="border-b border-ink" />
+
       {open && (
         <nav
-          className="md:hidden fixed inset-x-0 top-20 bottom-0 bg-neutral-950 flex flex-col justify-center gap-8 px-8 animate-fade-up"
+          className="md:hidden absolute inset-x-0 top-full h-[100svh] bg-paper px-6 py-10 flex flex-col gap-6 animate-rise"
           aria-label="Navigation mobile"
         >
-          <NavLinks pathname={pathname} mobile onNavigate={() => setOpen(false)} />
+          <Link href="/" onClick={() => setOpen(false)} className="font-serif text-5xl">Accueil</Link>
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className={`font-serif text-5xl ${isActive(pathname, l.href) ? 'italic' : ''}`}
+            >
+              {l.label}
+            </Link>
+          ))}
         </nav>
       )}
     </header>
+  );
+}
+
+function NavItem({ href, label, active }: { href: string; label: string; active: boolean }) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? 'page' : undefined}
+      className={`kicker transition ${active ? 'text-ink underline underline-offset-8' : 'text-muted hover:text-ink'}`}
+    >
+      {label}
+    </Link>
   );
 }
 
