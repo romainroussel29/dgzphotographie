@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
 const inputClass =
@@ -161,6 +162,13 @@ export default function CommentairesPage() {
               >
                 {sending ? 'Publication…' : 'Publier →'}
               </button>
+              <p className="text-xs text-muted leading-relaxed">
+                Votre nom et votre commentaire seront visibles publiquement sur cette page. Voir la{' '}
+                <Link href="/confidentialite" className="underline underline-offset-2 hover:text-ink">
+                  politique de confidentialité
+                </Link>
+                .
+              </p>
             </form>
           </div>
         </aside>

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import InstagramIcon from './InstagramIcon';
+import { EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_LINK } from '@/lib/contact';
 
 export default function SiteFooter() {
   return (
@@ -13,11 +15,24 @@ export default function SiteFooter() {
             <Link href="/commentaires" className="hover:text-white transition w-fit">Livre d&apos;or</Link>
             <Link href="/contact" className="hover:text-white transition w-fit">Contact</Link>
           </nav>
-          <div className="md:text-right">
-            <p className="kicker text-white/50 mb-3">Écrire</p>
-            <a href="mailto:contact@dgz-photographie.com" className="text-lg hover:underline underline-offset-4">
-              contact@dgz-photographie.com
-            </a>
+          <div className="md:text-right space-y-2">
+            <p className="kicker text-white/50 mb-3">Me joindre</p>
+            <p>
+              <a href={PHONE_LINK} className="text-lg hover:underline underline-offset-4">{PHONE_DISPLAY}</a>
+            </p>
+            <p>
+              <a href={`mailto:${EMAIL}`} className="text-lg hover:underline underline-offset-4 break-all">{EMAIL}</a>
+            </p>
+            <p>
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-lg hover:underline underline-offset-4"
+              >
+                <InstagramIcon />@{INSTAGRAM_HANDLE}
+              </a>
+            </p>
           </div>
         </div>
 
@@ -28,9 +43,13 @@ export default function SiteFooter() {
           DGZ
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 justify-between kicker text-white/40">
+        <div className="flex flex-col md:flex-row gap-4 justify-between kicker text-white/40">
           <span>© 2026 DGZ Photographie</span>
-          <Link href="/admin/login" className="hover:text-white/80 transition">Espace admin</Link>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Informations légales">
+            <Link href="/mentions-legales" className="hover:text-white/80 transition">Mentions légales</Link>
+            <Link href="/confidentialite" className="hover:text-white/80 transition">Confidentialité</Link>
+            <Link href="/admin/login" className="hover:text-white/80 transition">Espace admin</Link>
+          </nav>
         </div>
       </div>
     </footer>
