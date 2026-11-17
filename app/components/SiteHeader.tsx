@@ -25,10 +25,10 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
   }, [open]);
 
   return (
-    <header className="relative z-40 bg-paper">
+    <header className="relative z-40 bg-ink text-paper">
       {/* Bandeau supérieur */}
-      <div className="border-b border-line">
-        <div className="max-w-7xl mx-auto px-5 md:px-10 h-9 flex items-center justify-between kicker text-muted">
+      <div className="border-b border-white/15">
+        <div className="max-w-7xl mx-auto px-5 md:px-10 h-9 flex items-center justify-between kicker text-white/50">
           <span>Marseille</span>
           <span className="hidden sm:inline">Portrait · Street · Paysage</span>
           <span>Noir &amp; blanc</span>
@@ -48,14 +48,14 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
           className="col-start-2 justify-self-center text-center leading-none"
         >
           <span className="block font-serif text-4xl md:text-5xl tracking-tight">DGZ</span>
-          <span className="block kicker text-muted mt-2">Photographie</span>
+          <span className="block kicker text-white/50 mt-2">Photographie</span>
         </Link>
 
         <div className="hidden md:flex justify-end">
           <Link
             href="/contact"
             aria-current={isActive(pathname, '/contact') ? 'page' : undefined}
-            className="kicker border border-ink px-5 py-3 hover:bg-ink hover:text-paper transition"
+            className="kicker border border-paper px-5 py-3 hover:bg-paper hover:text-ink transition"
           >
             Réserver une séance
           </Link>
@@ -71,11 +71,9 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
         </button>
       </div>
 
-      <div className="border-b border-ink" />
-
       {open && (
         <nav
-          className="md:hidden absolute inset-x-0 top-full h-[100svh] bg-paper px-6 py-10 flex flex-col gap-6 animate-rise"
+          className="md:hidden absolute inset-x-0 top-full h-[100svh] bg-ink text-paper border-t border-white/15 px-6 py-10 flex flex-col gap-6 animate-rise"
           aria-label="Navigation mobile"
         >
           <Link href="/" onClick={() => setOpen(false)} className="font-serif text-5xl">Accueil</Link>
@@ -100,7 +98,7 @@ function NavItem({ href, label, active }: { href: string; label: string; active:
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={`kicker transition ${active ? 'text-ink underline underline-offset-8' : 'text-muted hover:text-ink'}`}
+      className={`kicker transition ${active ? 'text-paper underline underline-offset-8' : 'text-white/60 hover:text-paper'}`}
     >
       {label}
     </Link>

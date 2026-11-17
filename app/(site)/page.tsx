@@ -65,7 +65,7 @@ export default function Home() {
         </div>
 
         {/* Titre de couverture */}
-        <h1 className="mt-12 md:-mt-16 relative font-serif leading-[0.85] tracking-tighter text-center text-[17vw] md:text-[11rem] lg:text-[13rem] animate-rise [animation-delay:200ms]">
+        <h1 className="mt-16 md:mt-24 pt-10 md:pt-14 border-t border-ink relative font-serif leading-[0.9] tracking-tighter text-center text-[15vw] md:text-[9rem] lg:text-[10.5rem] animate-rise [animation-delay:200ms]">
           Le portrait <em className="font-normal">juste</em>
         </h1>
       </section>
