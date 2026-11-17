@@ -1,11 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
-const categories = [
-  { id: 'portrait', name: 'Portraits', description: "L'émotion et le naturel" },
-  { id: 'street', name: 'Street', description: "Saisir l'imprévu et les scènes de vie" },
-  { id: 'paysage', name: 'Paysages', description: 'Atmosphère et lumière' },
-];
+import InstagramIcon from '@/app/components/InstagramIcon';
+import { EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_LINK } from '@/lib/contact';
 
 export default function Home() {
   return (
@@ -100,35 +96,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Sommaire */}
-      <section className="max-w-7xl mx-auto px-5 md:px-10 py-20 md:py-28">
-        <div className="flex items-baseline justify-between border-b border-ink pb-4 mb-2">
-          <h2 className="font-serif text-4xl md:text-5xl">Sommaire</h2>
-          <Link href="/galerie" className="kicker hover:underline underline-offset-4">Tout voir</Link>
-        </div>
-
-        <div className="grid md:grid-cols-3">
-          {categories.map((cat, i) => (
-            <Link
-              key={cat.id}
-              href="/galerie"
-              className="group border-b md:border-b-0 md:border-r last:border-r-0 border-line py-10 md:px-8 first:md:pl-0 transition"
-            >
-              <span className="font-serif text-7xl md:text-8xl text-line group-hover:text-ink transition duration-500">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <h3 className="mt-6 font-serif text-3xl group-hover:italic">{cat.name}</h3>
-              <p className="mt-2 text-sm text-muted">{cat.description}</p>
-              <span className="mt-6 inline-block kicker border-b border-ink pb-1 opacity-0 group-hover:opacity-100 transition">
-                Découvrir
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* Réservation */}
-      <section className="max-w-7xl mx-auto px-5 md:px-10 pb-24">
+      <section className="max-w-7xl mx-auto px-5 md:px-10 py-20 md:py-28">
         <div className="border border-ink p-8 md:p-16 grid md:grid-cols-12 gap-8 items-center">
           <h2 className="md:col-span-8 font-serif text-4xl md:text-6xl leading-tight">
             Envie d&apos;un portrait qui vous <em>ressemble</em>&nbsp;?
@@ -140,6 +109,25 @@ export default function Home() {
             >
               Prendre rendez-vous →
             </Link>
+          </div>
+
+          <div className="md:col-span-12 border-t border-line pt-6 flex flex-wrap gap-x-10 gap-y-3 text-[15px]">
+            <a href={PHONE_LINK} className="hover:underline underline-offset-4">
+              <span className="kicker text-muted mr-3">Tél.</span>
+              {PHONE_DISPLAY}
+            </a>
+            <a href={`mailto:${EMAIL}`} className="hover:underline underline-offset-4 break-all">
+              <span className="kicker text-muted mr-3">Email</span>
+              {EMAIL}
+            </a>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 hover:underline underline-offset-4"
+            >
+              <InstagramIcon />@{INSTAGRAM_HANDLE}
+            </a>
           </div>
         </div>
       </section>
