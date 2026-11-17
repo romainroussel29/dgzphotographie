@@ -89,7 +89,18 @@ export default function GalleryView({ params }: { params: Promise<{ id: string }
           ))}
         </div>
       ) : photos.length === 0 ? (
-        <p className="py-24 text-center text-muted">Aucune photo dans cette galerie pour le moment.</p>
+        <div className="py-24 md:py-32 text-center">
+          <p className="font-serif italic text-5xl md:text-7xl">À venir…</p>
+          <p className="mt-6 text-muted max-w-md mx-auto leading-relaxed">
+            Cette série est en cours de préparation. Les photographies seront bientôt en ligne.
+          </p>
+          <Link
+            href="/galerie"
+            className="mt-10 inline-block kicker border-b border-ink pb-1 hover:opacity-70 transition"
+          >
+            Voir les autres galeries
+          </Link>
+        </div>
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-8 gap-y-12">
           {photos.map((photo, i) => (

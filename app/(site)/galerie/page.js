@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import InstagramIcon from '@/app/components/InstagramIcon';
+import { INSTAGRAM_URL } from '@/lib/contact';
 
 export default function GaleriePage() {
   const [galleries, setGalleries] = useState([]);
@@ -47,7 +49,20 @@ export default function GaleriePage() {
           ))}
         </div>
       ) : galleries.length === 0 ? (
-        <p className="py-24 text-center text-muted">Aucune galerie disponible pour le moment.</p>
+        <div className="py-24 md:py-32 text-center">
+          <p className="font-serif italic text-5xl md:text-7xl">À venir…</p>
+          <p className="mt-6 text-muted max-w-md mx-auto leading-relaxed">
+            Les galeries sont en cours de préparation. De nouvelles photographies arrivent très bientôt.
+          </p>
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-10 inline-flex items-center gap-2 kicker border-b border-ink pb-1 hover:opacity-70 transition"
+          >
+            <InstagramIcon /> En attendant, suivez-moi sur Instagram
+          </a>
+        </div>
       ) : (
         <div className="grid md:grid-cols-12 gap-10 mt-2">
           {/* Index */}
@@ -94,8 +109,8 @@ export default function GaleriePage() {
                     className="absolute inset-0 w-full h-full object-cover grayscale animate-rise"
                   />
                 ) : (
-                  <span className="absolute inset-0 flex items-center justify-center kicker text-muted">
-                    Bientôt
+                  <span className="absolute inset-0 flex items-center justify-center font-serif italic text-3xl text-muted">
+                    À venir…
                   </span>
                 )}
               </div>
