@@ -57,10 +57,10 @@ export default function HomePage() {
               <div className="overflow-hidden animate-unveil">
                 <div data-parallax="-0.06" className="scale-110">
                   <Image
-                    src="/images/portrait-dgz.jpg"
+                    src="/images/portrait-dgz.webp"
                     alt="Autoportrait du photographe DGZ derrière son appareil photo"
-                    width={1638}
-                    height={2048}
+                    width={1100}
+                    height={1375}
                     priority
                     sizes="(min-width: 768px) 448px, 90vw"
                     className="w-full h-auto grayscale animate-settle"

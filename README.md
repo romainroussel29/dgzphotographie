@@ -2,7 +2,9 @@
 
 Site portfolio d'un photographe portraitiste noir et blanc basé à Marseille.
 
-**Stack** : [Next.js 16](https://nextjs.org) (App Router, Cache Components) · React 19 · TypeScript · Tailwind CSS 4 · [Supabase](https://supabase.com) (base de données et stockage des photos).
+**Stack** : [Next.js 16](https://nextjs.org) (App Router, export statique) · React 19 · TypeScript · Tailwind CSS 4 · [Supabase](https://supabase.com) (base de données et stockage des photos).
+
+**Hébergement** : mutualisé OVH. Le site est exporté en fichiers statiques (HTML, CSS, JS) : aucun serveur Node.js n'est nécessaire.
 
 ## Démarrer
 
@@ -12,13 +14,12 @@ cp .env.example .env.local   # puis renseigner les clés Supabase
 npm run dev                  # http://localhost:3000
 ```
 
-| Script              | Rôle                                          |
-| ------------------- | --------------------------------------------- |
-| `npm run dev`       | Serveur de développement                      |
-| `npm run build`     | Build de production                           |
-| `npm start`         | Sert le build de production                   |
-| `npm run lint`      | ESLint                                        |
-| `npm run typecheck` | Vérification TypeScript                       |
+| Script              | Rôle                                                  |
+| ------------------- | ----------------------------------------------------- |
+| `npm run dev`       | Serveur de développement                              |
+| `npm run build`     | Export statique du site dans le dossier `out/`        |
+| `npm run lint`      | ESLint                                                |
+| `npm run typecheck` | Vérification TypeScript                               |
 
 ### Variables d'environnement
 
@@ -26,6 +27,19 @@ npm run dev                  # http://localhost:3000
 | ------------------------------- | ------------------------------------ |
 | `NEXT_PUBLIC_SUPABASE_URL`      | URL du projet Supabase               |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Clé publique (anon) du projet        |
+
+Ces valeurs sont intégrées au JavaScript lors du build : elles doivent être présentes dans `.env.local` avant `npm run build`.
+La clé « anon » est publique par nature ; la sécurité des données repose sur les règles RLS configurées dans Supabase.
+
+## Mise en ligne sur OVH
+
+1. `npm run build` : génère le dossier `out/` (quelques Mo).
+2. Avec Cyberduck ou FileZilla (FTP/SFTP de l'hébergement), envoyer **le contenu** de `out/` dans le dossier `www/`
+   (pas le dossier `out` lui-même, et jamais `node_modules`, `app`, etc.).
+3. Vérifier que le fichier caché `.htaccess` a bien été envoyé (afficher les fichiers cachés dans le client FTP).
+
+Le fichier [`public/.htaccess`](public/.htaccess) configure Apache : compression, cache navigateur, page 404 et en-têtes de sécurité.
+La redirection vers HTTPS y est prête mais commentée : à activer une fois le certificat SSL actif chez OVH.
 
 ## Organisation du code
 
@@ -38,7 +52,7 @@ app/                     Routes uniquement (pages, layouts, métadonnées)
 │   ├── layout.tsx       En-tête, pied de page, effets
 │   ├── template.tsx     Transition animée entre les pages
 │   ├── page.tsx         Accueil
-│   ├── galerie/         Index des galeries et page d'une galerie ([id])
+│   ├── galerie/         Index des galeries ; galerie/voir/?id=… pour une galerie
 │   ├── commentaires/    Livre d'or
 │   ├── contact/
 │   ├── mentions-legales/ · confidentialite/
@@ -47,51 +61,53 @@ app/                     Routes uniquement (pages, layouts, métadonnées)
 
 components/              Composants React, rangés par domaine
 ├── layout/              SiteHeader, SiteFooter, IntroCurtain
-├── ui/                  Briques réutilisables : Logo, PageHeader, ButtonLink, ComingSoon, styles de formulaire
+├── ui/                  Briques réutilisables : Logo, PageHeader, ButtonLink, ComingSoon, LoadError, styles de formulaire
 ├── motion/              Animations : Motion (défilement, parallaxe), Cursor, SplitText
-├── gallery/             GalleryIndex, GalleryGrid, Lightbox
-├── guestbook/           CommentList, CommentForm
+├── gallery/             GalleriesSection, GalleryIndex, GalleryView, GalleryGrid, Lightbox
+├── guestbook/           Guestbook, CommentList, CommentForm
 ├── contact/             ContactDetails, ContactForm
 └── legal/               Mise en page des pages légales
 
 lib/                     Code sans interface
 ├── site.ts              Coordonnées, nom du site, citation : à modifier ici uniquement
 ├── types.ts             Types des tables Supabase
-├── data/                Lecture des données, mise en cache avec 'use cache'
-├── actions/             Actions serveur (écriture + invalidation du cache)
-├── supabase/            Clients Supabase (navigateur / serveur)
-├── cache-tags.ts        Étiquettes de cache partagées entre data/ et actions/
+├── data/                Lecture et écriture Supabase (galeries, livre d'or)
+├── hooks/useAsync.ts    Chargement de données dans un composant
+├── supabase/client.ts   Client Supabase
 └── format.ts            Petites fonctions de mise en forme
 
-public/images/           Images statiques (portrait, logo)
+public/                  Copié tel quel dans out/ : images WebP, .htaccess
+design/                  Fichiers sources (logo original) : local, ni versionné ni publié
 ```
 
 Conventions :
 
-- **Composants serveur par défaut.** `'use client'` uniquement pour l'interactivité (survol, formulaires, visionneuse, animations).
+- **Composants serveur par défaut** : ils sont rendus en HTML au moment du build. `'use client'` uniquement pour
+  l'interactivité et pour les données lues dans le navigateur.
 - **Une page = une route** dans `app/`, la logique et l'affichage vivent dans `components/` et `lib/`.
 - **Alias d'import** `@/` vers la racine du projet (`@/components/...`, `@/lib/...`).
 - Les noms de fichiers de composants sont en `PascalCase`, le reste en `kebab-case`.
 
-## Données et cache
+## Données
 
-Les pages publiques lisent Supabase **côté serveur** via `lib/data/*`. Chaque fonction est mise en cache
-(`'use cache'`, durée `hours`) et étiquetée (`cacheTag`) :
+Le site étant statique, le contenu modifiable (galeries, photos, livre d'or) est lu **dans le navigateur**, directement
+depuis Supabase (`lib/data/*`). Tout changement fait dans l'admin est donc visible immédiatement, sans reconstruire
+ni renvoyer le site. Seuls les textes et la mise en page nécessitent un nouveau `npm run build` et un envoi sur OVH.
 
-| Donnée             | Étiquette   | Invalidée par                                                 |
-| ------------------ | ----------- | ------------------------------------------------------------- |
-| Galeries et photos | `galleries` | `refreshGalleries()`, appelée par l'admin après chaque modification |
-| Livre d'or         | `comments`  | `addComment()`, à chaque nouveau message                       |
-
-Résultat : `/galerie` et `/commentaires` sont servies en HTML statique et se mettent à jour dès qu'un contenu change.
+Une galerie s'affiche à l'adresse `/galerie/voir/?id=<identifiant>` : une seule page statique sert toutes les galeries,
+y compris celles créées après la mise en ligne.
 
 ## Performance
 
-- Images servies par `next/image` en **AVIF / WebP**, aux bonnes dimensions, mises en cache 31 jours.
-- **Compression gzip** activée (`compress: true`) ; Vercel sert en Brotli.
-- JavaScript et CSS versionnés : cache navigateur d'un an (`immutable`). Fichiers de `public/images` : 30 jours.
+- Images de `public/images` préparées en **WebP** (portrait 83 Ko, logo 26 Ko). L'optimisation automatique de
+  `next/image` n'existe pas en export statique (`images.unoptimized`).
+- **Compression** gzip et **cache navigateur** configurés dans `.htaccess` : un an pour les fichiers de `_next/static`
+  (leur nom change à chaque build), 30 jours pour les images, revalidation systématique des pages HTML.
 - Polices auto-hébergées par `next/font`.
 - Animations en CSS (aucune bibliothèque), désactivées si le visiteur a réglé « réduire les animations ».
+
+Conseil : les photos envoyées depuis l'admin sont publiées telles quelles. Les redimensionner avant envoi
+(2 000 px de large, JPEG ou WebP) accélère nettement les galeries.
 
 ## Animations : mode d'emploi
 

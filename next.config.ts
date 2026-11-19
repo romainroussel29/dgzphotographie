@@ -1,48 +1,23 @@
 import type { NextConfig } from 'next';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-// Fichiers de /public (non versionnés par Next.js) : 30 jours de cache navigateur,
-// puis revalidation en arrière-plan pendant une semaine.
-const PUBLIC_ASSET_CACHE = 'public, max-age=2592000, stale-while-revalidate=604800';
-
+/**
+ * Le site est exporté en fichiers statiques (dossier `out/`) pour l'hébergement mutualisé OVH,
+ * qui ne fait pas tourner Node.js. Conséquences :
+ * - les données (galeries, livre d'or) sont lues dans le navigateur, directement depuis Supabase ;
+ * - les images ne sont pas optimisées à la volée : elles sont préparées en WebP dans public/images ;
+ * - le cache et la compression sont gérés par Apache via public/.htaccess.
+ */
 const nextConfig: NextConfig = {
-  experimental: {
-    agentFeedback: true,
-  },
-
-  // Rendu : coquilles statiques + données mises en cache avec 'use cache' (voir lib/data).
-  cacheComponents: true,
-  partialPrefetching: true,
-
-  // Compression gzip des pages et fichiers servis par `next start` (Vercel compresse en Brotli de lui-même).
-  compress: true,
-  poweredByHeader: false,
+  output: 'export',
+  // Génère galerie/index.html plutôt que galerie.html : adresses propres sur Apache.
+  trailingSlash: true,
 
   images: {
-    // AVIF en priorité (le plus léger), WebP pour les navigateurs plus anciens.
-    formats: ['image/avif', 'image/webp'],
-    qualities: [75, 90],
-    // Les photos ne changent jamais à URL constante (noms de fichiers uniques) : cache de 31 jours.
-    minimumCacheTTL: 2678400,
-    // Photos stockées dans Supabase Storage.
-    remotePatterns: supabaseUrl ? [new URL(`${supabaseUrl}/storage/v1/object/public/**`)] : [],
+    unoptimized: true,
   },
 
-  async headers() {
-    return [
-      {
-        source: '/images/:path*',
-        headers: [{ key: 'Cache-Control', value: PUBLIC_ASSET_CACHE }],
-      },
-      {
-        source: '/:path*',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-        ],
-      },
-    ];
+  experimental: {
+    agentFeedback: true,
   },
 
   turbopack: {

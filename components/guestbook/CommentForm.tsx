@@ -4,14 +4,34 @@ import { useActionState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ButtonArrow, buttonClass } from '@/components/ui/ButtonLink';
 import { inputClass, labelClass } from '@/components/ui/form';
-import { addComment, type CommentFormState } from '@/lib/actions/comments';
+import { MAX_AUTHOR_LENGTH, MAX_CONTENT_LENGTH, insertComment } from '@/lib/data/comments';
+import type { Comment } from '@/lib/types';
 
-const initialState: CommentFormState = { status: 'idle' };
+type FormState = { status: 'idle' | 'success' | 'error'; message?: string };
 
-/** Formulaire du livre d'or. L'envoi passe par une action serveur qui rafraîchit la liste. */
-export default function CommentForm() {
-  const [state, formAction, pending] = useActionState(addComment, initialState);
+/** Formulaire du livre d'or. Le message est enregistré dans Supabase puis ajouté en tête de liste. */
+export default function CommentForm({ onPublished }: { onPublished: (comment: Comment) => void }) {
   const formRef = useRef<HTMLFormElement>(null);
+
+  const [state, formAction, pending] = useActionState<FormState, FormData>(async (_prev, formData) => {
+    const author = String(formData.get('author') ?? '').trim();
+    const content = String(formData.get('content') ?? '').trim();
+
+    if (!author || !content) {
+      return { status: 'error', message: 'Merci de renseigner votre nom et votre message.' };
+    }
+    if (author.length > MAX_AUTHOR_LENGTH || content.length > MAX_CONTENT_LENGTH) {
+      return { status: 'error', message: 'Votre nom ou votre message est trop long.' };
+    }
+
+    try {
+      onPublished(await insertComment(author, content));
+      return { status: 'success' };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', message: "Une erreur est survenue lors de l'envoi. Merci de réessayer." };
+    }
+  }, { status: 'idle' });
 
   useEffect(() => {
     if (state.status === 'success') formRef.current?.reset();
@@ -44,7 +64,7 @@ export default function CommentForm() {
             name="author"
             type="text"
             required
-            maxLength={80}
+            maxLength={MAX_AUTHOR_LENGTH}
             autoComplete="nickname"
             className={inputClass}
             placeholder="Ex : Jean Dupont"
@@ -60,7 +80,7 @@ export default function CommentForm() {
             name="content"
             rows={5}
             required
-            maxLength={2000}
+            maxLength={MAX_CONTENT_LENGTH}
             className={`${inputClass} resize-none`}
             placeholder="Partagez votre avis…"
           />

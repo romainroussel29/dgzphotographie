@@ -46,7 +46,7 @@ export default function ConfidentialitePage() {
       <Section title="Destinataires et hébergement">
         <p>
           Les données sont destinées uniquement à DGZ Photographie. Elles sont hébergées par des prestataires
-          techniques : Vercel Inc. (hébergement du site) et Supabase Inc. (base de données). Ces prestataires
+          techniques : OVH SAS (hébergement du site, en France) et Supabase Inc. (base de données). Ces prestataires
           peuvent être situés hors de l&apos;Union européenne ; dans ce cas, les transferts sont encadrés par les
           clauses contractuelles types de la Commission européenne.
         </p>

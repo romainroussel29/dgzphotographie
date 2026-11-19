@@ -33,11 +33,11 @@ export default function MentionsLegalesPage() {
 
       <Section title="Hébergement">
         <p>
-          <strong>Vercel Inc.</strong>
+          <strong>OVH SAS</strong>
           <br />
-          440 N Barranca Ave #4133, Covina, CA 91723, États-Unis
+          2 rue Kellermann, 59100 Roubaix, France
           <br />
-          <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">vercel.com</a>
+          <a href="https://www.ovhcloud.com" target="_blank" rel="noopener noreferrer">ovhcloud.com</a>
         </p>
         <p>
           Les données (galeries, photos, commentaires) sont stockées par <strong>Supabase Inc.</strong> (

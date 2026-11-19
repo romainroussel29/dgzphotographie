@@ -23,7 +23,7 @@ export default function GalleryIndex({ galleries }: { galleries: Gallery[] }) {
           return (
             <li key={gallery.id} className="relative border-b border-line">
               <Link
-                href={`/galerie/${gallery.id}`}
+                href={`/galerie/voir/?id=${encodeURIComponent(gallery.id)}`}
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
                 data-cursor="Voir"

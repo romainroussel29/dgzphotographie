@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '@/components/ui/Logo';
 import { supabase } from '@/lib/supabase/client';
-import { refreshGalleries } from '@/lib/actions/galleries';
 import { SITE_NAME } from '@/lib/site';
 import type { Gallery, Photo } from '@/lib/types';
 
@@ -21,7 +20,7 @@ const errorMessage = (error: unknown) => (error instanceof Error ? error.message
 
 /**
  * Tableau de bord : gestion des galeries (création, ordre, suppression) et de leurs photos.
- * Après chaque modification, le cache des pages publiques est vidé via `refreshGalleries`.
+ * Les pages publiques lisent Supabase directement : les changements y sont visibles immédiatement.
  */
 export default function AdminDashboardPage() {
   const [galleries, setGalleries] = useState<Gallery[]>([]);
@@ -90,7 +89,6 @@ export default function AdminDashboardPage() {
 
       setNewGalleryTitle('');
       await fetchGalleries();
-      await refreshGalleries();
     } catch (error) {
       console.error('Erreur création galerie :', errorMessage(error));
       alert('Erreur : cette galerie existe peut-être déjà.');
@@ -103,7 +101,6 @@ export default function AdminDashboardPage() {
       const { error } = await supabase.from('galleries').delete().eq('id', id);
       if (error) throw error;
       await fetchGalleries();
-      await refreshGalleries();
     } catch (error) {
       console.error('Erreur suppression :', errorMessage(error));
     }
@@ -122,7 +119,6 @@ export default function AdminDashboardPage() {
         const { error } = await supabase.from('galleries').update({ position: i }).eq('id', reordered[i].id);
         if (error) throw error;
       }
-      await refreshGalleries();
     } catch (error) {
       console.error('Erreur lors du réordonnancement :', errorMessage(error));
       fetchGalleries();
@@ -158,7 +154,6 @@ export default function AdminDashboardPage() {
       }
 
       await fetchPhotos(selectedGalleryId);
-      await refreshGalleries();
       alert('Photo téléchargée avec succès !');
     } catch (error) {
       console.error('Erreur upload :', errorMessage(error));
@@ -175,7 +170,6 @@ export default function AdminDashboardPage() {
       const { error } = await supabase.from('photos').delete().eq('id', photoId);
       if (error) throw error;
       await fetchPhotos(selectedGalleryId);
-      await refreshGalleries();
     } catch (error) {
       console.error('Erreur suppression photo :', errorMessage(error));
     }

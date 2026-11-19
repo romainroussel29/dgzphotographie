@@ -20,10 +20,10 @@ export default function Logo({
 }) {
   return (
     <Image
-      src="/images/logo-dgz.png"
+      src="/images/logo-dgz.webp"
       alt={decorative ? '' : 'DGZ Photographie'}
-      width={1257}
-      height={745}
+      width={1000}
+      height={593}
       priority={priority}
       sizes={sizes}
       draggable={false}
