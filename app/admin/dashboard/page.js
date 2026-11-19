@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Logo from '@/app/components/Logo';
 import { supabase } from '@/lib/supabase';
 
 export default function AdminDashboardPage() {
@@ -183,7 +184,11 @@ export default function AdminDashboardPage() {
     <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans flex flex-col justify-between">
       <header className="flex justify-between items-center px-8 py-6 border-b border-neutral-900">
         <div className="flex items-center space-x-4">
-          <h1 className="text-xl font-light tracking-widest uppercase">DGZ Admin</h1>
+          <h1 className="flex items-center gap-3 text-xl font-light tracking-widest uppercase">
+            <Logo light decorative sizes="96px" className="w-24" />
+            <span>Admin</span>
+            <span className="sr-only">DGZ Photographie</span>
+          </h1>
           <span className="text-[10px] uppercase tracking-widest bg-neutral-900 text-neutral-400 px-2.5 py-1 border border-neutral-800">
             Connecté à Supabase
           </span>

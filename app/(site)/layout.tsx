@@ -1,8 +1,9 @@
-import { Suspense, type CSSProperties } from 'react';
+import { Suspense } from 'react';
 import SiteHeader from '@/app/components/SiteHeader';
 import SiteFooter from '@/app/components/SiteFooter';
 import Motion from '@/app/components/motion/Motion';
 import Cursor from '@/app/components/motion/Cursor';
+import Logo from '@/app/components/Logo';
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,15 +11,11 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       {/* Rideau d'introduction (une fois par session) */}
       <div className="intro" aria-hidden>
         <div>
-          <p className="intro-word">
-            {Array.from('DGZ').map((c, i) => (
-              <span key={i} style={{ '--i': i } as CSSProperties}>
-                {c}
-              </span>
-            ))}
-          </p>
+          <div className="intro-logo">
+            <Logo light priority decorative sizes="(min-width: 768px) 520px, 80vw" className="w-full" />
+          </div>
           <div className="intro-bar" />
-          <span className="intro-sub kicker">Photographie — Marseille</span>
+          <span className="intro-sub kicker">Marseille</span>
         </div>
       </div>
 

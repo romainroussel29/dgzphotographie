@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import InstagramIcon from './InstagramIcon';
+import Logo from './Logo';
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '@/lib/contact';
 
 const links = [
@@ -56,16 +57,10 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
         <Link
           href="/"
           onClick={() => setOpen(false)}
-          className="col-start-2 justify-self-center text-center leading-none"
+          aria-label="DGZ Photographie — Accueil"
+          className="col-start-2 justify-self-center block"
         >
-          <span className="block font-serif text-4xl md:text-5xl tracking-tight split-load [--step:90ms] [--d:150ms]" aria-label="DGZ">
-            {Array.from('DGZ').map((c, i) => (
-              <span key={i} className="split-w" aria-hidden>
-                <span style={{ '--i': i } as React.CSSProperties}>{c}</span>
-              </span>
-            ))}
-          </span>
-          <span className="block kicker text-white/50 mt-2 animate-rise [--d:450ms]">Photographie</span>
+          <Logo light priority decorative sizes="(min-width: 768px) 160px, 120px" className="w-[120px] md:w-[160px] animate-sign [--d:150ms]" />
         </Link>
 
         <div className="hidden md:flex justify-end">

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import InstagramIcon from './InstagramIcon';
 import Split from './motion/Split';
+import Logo from './Logo';
 import { EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_LINK } from '@/lib/contact';
 
 export default function SiteFooter() {
@@ -41,15 +42,10 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div aria-hidden className="select-none py-6">
-          <Split
-            as="p"
-            mode="view"
-            letters
-            step={120}
-            text="DGZ"
-            className="block font-serif leading-none tracking-tighter text-center text-[22vw] md:text-[17vw] lg:text-[15rem]"
-          />
+        <div className="py-10 md:py-14 flex justify-center">
+          <div data-reveal="sign" className="w-[75vw] max-w-[640px]">
+            <Logo light sizes="(min-width: 860px) 640px, 75vw" className="w-full" />
+          </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 justify-between kicker text-white/40">
