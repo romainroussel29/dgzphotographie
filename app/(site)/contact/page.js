@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import InstagramIcon from '@/app/components/InstagramIcon';
+import Split from '@/app/components/motion/Split';
 import { EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_LINK } from '@/lib/contact';
 
 const inputClass =
@@ -19,12 +20,13 @@ export default function ContactPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-20">
-      <header className="border-b border-ink pb-6 mb-14 animate-rise">
-        <h1 className="font-serif text-6xl md:text-8xl leading-none tracking-tight">Contact</h1>
+      <header className="relative pb-6 mb-14">
+        <Split as="h1" text="Contact" letters step={45} className="block font-serif text-6xl md:text-8xl leading-none tracking-tight" />
+        <span className="absolute inset-x-0 bottom-0 h-px bg-ink origin-left animate-[grow_1.4s_var(--ease-io)_both] [animation-delay:calc(var(--intro)+150ms)]" />
       </header>
 
       <div className="grid md:grid-cols-12 gap-14 md:gap-10">
-        <aside className="md:col-span-4 space-y-10">
+        <aside className="md:col-span-4 space-y-10" data-stagger="up">
           <p className="font-serif italic text-3xl leading-snug">
             Une question, un projet de collaboration ou une demande de tirage&nbsp;?
           </p>
@@ -32,7 +34,7 @@ export default function ContactPage() {
             N&apos;hésitez pas à m&apos;écrire. Je réponds personnellement à chaque message.
           </p>
 
-          <dl className="border-t border-ink">
+          <dl className="border-t border-ink" data-stagger="up">
             <div className="flex justify-between gap-4 py-4 border-b border-line">
               <dt className="kicker text-muted">Téléphone</dt>
               <dd>
@@ -72,19 +74,20 @@ export default function ContactPage() {
         <div className="md:col-span-7 md:col-start-6">
           {submitted ? (
             <div className="bg-ink text-paper p-10 md:p-16 animate-rise">
-              <p className="font-serif italic text-5xl">Merci.</p>
+              <Split as="p" text="_Merci._" className="block font-serif text-5xl" />
               <p className="mt-6 text-white/70 leading-relaxed max-w-md">
                 Votre message a bien été pris en compte. Je vous répondrai dans les plus brefs délais.
               </p>
               <button
                 onClick={() => setSubmitted(false)}
-                className="mt-10 kicker border border-white/40 px-5 py-3 hover:bg-paper hover:text-ink transition"
+                data-magnetic
+                className="btn-wipe mt-10 kicker !border-white/40 px-5 py-3"
               >
                 Envoyer un autre message
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="bg-paper-deep p-6 md:p-10 space-y-6">
+            <form onSubmit={handleSubmit} className="bg-paper-deep p-6 md:p-10 space-y-6" data-stagger="up">
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="nom" className={labelClass}>Nom</label>
@@ -108,8 +111,8 @@ export default function ContactPage() {
                 <textarea id="message" rows={7} required className={`${inputClass} resize-none`} placeholder="Parlez-moi de votre projet…" />
               </div>
 
-              <button type="submit" className="w-full bg-ink text-paper py-4 kicker hover:bg-black transition">
-                Envoyer le message →
+              <button type="submit" className="group btn-wipe w-full bg-ink text-paper py-4 kicker [--wipe:var(--paper)]">
+                Envoyer le message <span className="btn-arrow">→</span>
               </button>
               <p className="text-xs text-muted leading-relaxed">
                 Les informations saisies servent uniquement à répondre à votre demande. Voir la{' '}

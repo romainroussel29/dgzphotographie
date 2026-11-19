@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import Split from '@/app/components/motion/Split';
 
 const inputClass =
   'w-full bg-paper border border-line px-4 py-3.5 text-[15px] text-ink placeholder:text-muted/60 focus:outline-none focus:border-ink transition';
@@ -69,11 +70,10 @@ export default function CommentairesPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-20">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-ink pb-6 mb-14 animate-rise">
-        <h1 className="font-serif text-6xl md:text-8xl leading-none tracking-tight">
-          Livre <em>d&apos;or</em>
-        </h1>
-        <p className="max-w-sm text-sm text-muted md:text-right">
+      <header className="relative flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-14">
+        <Split as="h1" text="Livre _d'or_" step={110} className="block font-serif text-6xl md:text-8xl leading-none tracking-tight" />
+        <span className="absolute inset-x-0 bottom-0 h-px bg-ink origin-left animate-[grow_1.4s_var(--ease-io)_both] [animation-delay:calc(var(--intro)+150ms)]" />
+        <p className="max-w-sm text-sm text-muted md:text-right animate-rise [--d:400ms]">
           Laissez un commentaire, une impression ou un mot sur l&apos;univers photographique.
         </p>
       </header>
@@ -96,7 +96,7 @@ export default function CommentairesPage() {
               Aucun commentaire pour le moment. Soyez le premier à laisser un mot&nbsp;!
             </p>
           ) : (
-            <ul className="sm:columns-2 gap-6">
+            <ul className="sm:columns-2 gap-6" data-stagger="up">
               {comments.map((comment) => (
                 <li key={comment.id} className="break-inside-avoid mb-6 bg-paper-deep p-7">
                   <span className="font-serif text-5xl leading-none text-line" aria-hidden>“</span>
@@ -119,7 +119,7 @@ export default function CommentairesPage() {
 
         {/* Formulaire */}
         <aside className="md:col-span-4 order-1 md:order-2">
-          <div className="md:sticky md:top-8 border border-ink p-6 md:p-8">
+          <div className="md:sticky md:top-8 border border-ink p-6 md:p-8 animate-rise [--d:300ms]">
             <h2 className="font-serif text-3xl">Laisser un mot</h2>
 
             {successMessage && (
@@ -158,9 +158,9 @@ export default function CommentairesPage() {
               <button
                 type="submit"
                 disabled={sending}
-                className="w-full bg-ink text-paper py-4 kicker hover:bg-black transition disabled:opacity-50"
+                className="group btn-wipe w-full bg-ink text-paper py-4 kicker disabled:opacity-50"
               >
-                {sending ? 'Publication…' : 'Publier →'}
+                {sending ? 'Publication…' : <>Publier <span className="btn-arrow">→</span></>}
               </button>
               <p className="text-xs text-muted leading-relaxed">
                 Votre nom et votre commentaire seront visibles publiquement sur cette page. Voir la{' '}

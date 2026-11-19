@@ -1,8 +1,9 @@
 'use client';
 
-import { use, useCallback, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import Split from '@/app/components/motion/Split';
 
 type Gallery = { id: string; title: string };
 type Photo = { id: string; url: string; name: string | null };
@@ -50,6 +51,29 @@ export default function GalleryView({ params }: { params: Promise<{ id: string }
     [photos.length],
   );
 
+  // Précharge les photos voisines pour un défilement fluide dans la visionneuse.
+  useEffect(() => {
+    if (current === null || photos.length < 2) return;
+    for (const k of [current + 1, current - 1]) {
+      const img = new Image();
+      img.src = photos[(k + photos.length) % photos.length].url;
+    }
+  }, [current, photos]);
+
+  // Balayage tactile : gauche / droite pour changer de photo.
+  const touchX = useRef<number | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) < 50) return;
+    if (dx < 0) next();
+    else prev();
+  };
+
   useEffect(() => {
     if (current === null) return;
     const onKey = (e: KeyboardEvent) => {
@@ -67,16 +91,26 @@ export default function GalleryView({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-20">
-      <Link href="/galerie" className="kicker text-muted hover:text-ink transition">
-        ← Index des galeries
+      <Link href="/galerie" className="group kicker text-muted hover:text-ink transition-colors animate-rise">
+        <span className="inline-block transition-transform duration-500 group-hover:-translate-x-1.5">←</span> Index des
+        galeries
       </Link>
 
-      <header className="mt-8 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-ink pb-6 animate-rise">
-        <h1 className="font-serif text-6xl md:text-8xl leading-none tracking-tight">
-          {loading ? '…' : gallery?.title ?? 'Galerie introuvable'}
-        </h1>
+      <header className="relative mt-8 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6">
+        {loading ? (
+          <h1 className="font-serif text-6xl md:text-8xl leading-none tracking-tight text-line animate-pulse">…</h1>
+        ) : (
+          <Split
+            key={gallery?.id ?? 'none'}
+            as="h1"
+            text={gallery?.title ?? 'Galerie introuvable'}
+            step={90}
+            className="block font-serif text-6xl md:text-8xl leading-none tracking-tight"
+          />
+        )}
+        <span className="absolute inset-x-0 bottom-0 h-px bg-ink origin-left animate-[grow_1.4s_var(--ease-io)_both] [animation-delay:calc(var(--intro)+100ms)]" />
         {!loading && photos.length > 0 && (
-          <p className="kicker text-muted">
+          <p className="kicker text-muted animate-rise [--d:300ms]">
             {num(photos.length)} photographie{photos.length > 1 ? 's' : ''}
           </p>
         )}
@@ -90,13 +124,13 @@ export default function GalleryView({ params }: { params: Promise<{ id: string }
         </div>
       ) : photos.length === 0 ? (
         <div className="py-24 md:py-32 text-center">
-          <p className="font-serif italic text-5xl md:text-7xl">À venir…</p>
-          <p className="mt-6 text-muted max-w-md mx-auto leading-relaxed">
+          <Split as="p" text="_À_ _venir…_" step={120} className="block font-serif text-5xl md:text-7xl" />
+          <p className="mt-6 text-muted max-w-md mx-auto leading-relaxed animate-rise [--d:300ms]">
             Cette série est en cours de préparation. Les photographies seront bientôt en ligne.
           </p>
           <Link
             href="/galerie"
-            className="mt-10 inline-block kicker border-b border-ink pb-1 hover:opacity-70 transition"
+            className="mt-10 inline-block kicker border-b border-ink pb-1 hover:opacity-70 transition animate-rise [--d:450ms]"
           >
             Voir les autres galeries
           </Link>
@@ -108,6 +142,8 @@ export default function GalleryView({ params }: { params: Promise<{ id: string }
               <button
                 type="button"
                 onClick={() => setCurrent(i)}
+                data-reveal="clip"
+                data-cursor="Voir"
                 className="group block w-full aspect-[4/5] bg-paper-deep overflow-hidden cursor-zoom-in"
                 aria-label={`Agrandir la photo ${i + 1}`}
               >
@@ -115,10 +151,10 @@ export default function GalleryView({ params }: { params: Promise<{ id: string }
                   src={photo.url}
                   alt={photo.name || `${gallery?.title ?? 'Photo'} ${i + 1}`}
                   loading="lazy"
-                  className="w-full h-full object-cover grayscale transition duration-700 group-hover:scale-[1.03]"
+                  className="w-full h-full object-cover grayscale transition-[scale] duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.06]"
                 />
               </button>
-              <figcaption className="mt-3 flex justify-between kicker text-muted">
+              <figcaption className="mt-3 flex justify-between kicker text-muted" data-reveal="fade">
                 <span>Pl. {num(i + 1)}</span>
                 <span>{gallery?.title}</span>
               </figcaption>
@@ -129,36 +165,49 @@ export default function GalleryView({ params }: { params: Promise<{ id: string }
 
       {current !== null && photos[current] && (
         <div
-          className="fixed inset-0 z-50 bg-paper flex flex-col animate-rise"
+          className="fixed inset-0 z-50 bg-paper flex flex-col [animation:unveil_0.8s_var(--ease-io)_both]"
           role="dialog"
           aria-modal="true"
           aria-label="Visionneuse"
         >
           <div className="flex items-center justify-between px-5 md:px-10 h-16 border-b border-line kicker">
             <span>
-              {gallery?.title} — Pl. {num(current + 1)} / {num(photos.length)}
+              {gallery?.title} — Pl.{' '}
+              <span key={current} className="inline-block animate-[rise_0.5s_var(--ease-out)_both]">
+                {num(current + 1)}
+              </span>{' '}
+              / {num(photos.length)}
             </span>
-            <button type="button" onClick={close} className="hover:underline underline-offset-4">
+            <button type="button" onClick={close} className="link-draw">
               Fermer ✕
             </button>
           </div>
 
-          <div className="relative flex-1 flex items-center justify-center p-6 md:p-12 min-h-0" onClick={close}>
+          <div
+            className="relative flex-1 flex items-center justify-center p-6 md:p-12 min-h-0"
+            onClick={close}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            data-cursor="Fermer"
+          >
             <img
+              key={photos[current].id}
               src={photos[current].url}
               alt={photos[current].name || ''}
-              className="max-h-full max-w-full object-contain grayscale"
+              data-cursor=""
+              className="max-h-full max-w-full object-contain grayscale animate-photo-in"
               onClick={(e) => e.stopPropagation()}
             />
           </div>
 
           {photos.length > 1 && (
             <div className="flex justify-between px-5 md:px-10 h-16 items-center border-t border-line kicker">
-              <button type="button" onClick={prev} className="hover:underline underline-offset-4">
-                ← Précédente
+              <button type="button" onClick={prev} className="group link-draw">
+                <span className="inline-block transition-transform duration-500 group-hover:-translate-x-1.5">←</span>{' '}
+                Précédente
               </button>
-              <button type="button" onClick={next} className="hover:underline underline-offset-4">
-                Suivante →
+              <button type="button" onClick={next} className="group link-draw">
+                Suivante <span className="btn-arrow">→</span>
               </button>
             </div>
           )}

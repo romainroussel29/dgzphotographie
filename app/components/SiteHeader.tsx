@@ -58,17 +58,24 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
           onClick={() => setOpen(false)}
           className="col-start-2 justify-self-center text-center leading-none"
         >
-          <span className="block font-serif text-4xl md:text-5xl tracking-tight">DGZ</span>
-          <span className="block kicker text-white/50 mt-2">Photographie</span>
+          <span className="block font-serif text-4xl md:text-5xl tracking-tight split-load [--step:90ms] [--d:150ms]" aria-label="DGZ">
+            {Array.from('DGZ').map((c, i) => (
+              <span key={i} className="split-w" aria-hidden>
+                <span style={{ '--i': i } as React.CSSProperties}>{c}</span>
+              </span>
+            ))}
+          </span>
+          <span className="block kicker text-white/50 mt-2 animate-rise [--d:450ms]">Photographie</span>
         </Link>
 
         <div className="hidden md:flex justify-end">
           <Link
             href="/contact"
             aria-current={isActive(pathname, '/contact') ? 'page' : undefined}
-            className="kicker border border-paper px-5 py-3 hover:bg-paper hover:text-ink transition"
+            data-magnetic
+            className="btn-wipe group kicker !border-paper px-5 py-3"
           >
-            Réserver une séance
+            Réserver une séance <span className="btn-arrow">→</span>
           </Link>
         </div>
 
@@ -84,25 +91,31 @@ function HeaderInner({ pathname }: { pathname: string | null }) {
 
       {open && (
         <nav
-          className="md:hidden absolute inset-x-0 top-full h-[100svh] bg-ink text-paper border-t border-white/15 px-6 py-10 flex flex-col gap-6 animate-rise"
+          className="md:hidden absolute inset-x-0 top-full h-[100svh] bg-ink text-paper border-t border-white/15 px-6 py-10 flex flex-col gap-6 [animation:unveil_0.8s_var(--ease-io)_both]"
           aria-label="Navigation mobile"
         >
-          <Link href="/" onClick={() => setOpen(false)} className="font-serif text-5xl">Accueil</Link>
-          {links.map((l) => (
+          {[{ href: '/', label: 'Accueil' }, ...links].map((l, i) => (
             <Link
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className={`font-serif text-5xl ${isActive(pathname, l.href) ? 'italic' : ''}`}
+              className="block overflow-hidden"
             >
-              {l.label}
+              <span
+                className={`block font-serif text-5xl animate-[word-up_0.9s_var(--ease-out)_both] ${
+                  l.href !== '/' && isActive(pathname, l.href) ? 'italic' : ''
+                }`}
+                style={{ animationDelay: `${150 + i * 80}ms` }}
+              >
+                {l.label}
+              </span>
             </Link>
           ))}
           <a
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-3 kicker text-white/70"
+            className="mt-6 inline-flex items-center gap-3 kicker text-white/70 animate-rise [--d:500ms]"
           >
             <InstagramIcon /> @{INSTAGRAM_HANDLE}
           </a>
@@ -117,7 +130,7 @@ function NavItem({ href, label, active }: { href: string; label: string; active:
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={`kicker transition ${active ? 'text-paper underline underline-offset-8' : 'text-white/60 hover:text-paper'}`}
+      className={`kicker link-draw pb-1 transition-colors ${active ? 'text-paper' : 'text-white/60 hover:text-paper'}`}
     >
       {label}
     </Link>
