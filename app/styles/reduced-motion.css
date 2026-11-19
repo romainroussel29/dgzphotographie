@@ -1,0 +1,36 @@
+/* Accessibilité : respecte le réglage « réduire les animations » du système. À importer en dernier. */
+
+/* ---------------------------------------------------------------------------
+   Mouvement réduit : tout est affiché immédiatement
+   ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after,
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .intro,
+  .grain,
+  .cursor,
+  .scroll-progress {
+    display: none !important;
+  }
+
+  html[data-js] :is([data-reveal], [data-stagger] > *),
+  html[data-js] :is([data-reveal], [data-stagger] > *) :is(img, .clip-inner),
+  html[data-js] .split-w > span {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+}

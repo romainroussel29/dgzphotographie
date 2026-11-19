@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { LegalPage, Section } from '@/app/components/Legal';
-import { EMAIL } from '@/lib/contact';
+import { LegalPage, Section } from '@/components/legal/LegalPage';
+import { EMAIL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',

@@ -1,5 +1,5 @@
-// Éléments communs aux pages légales.
-import Split from './motion/Split';
+// Éléments communs aux pages légales (mentions légales, confidentialité).
+import PageHeader from '@/components/ui/PageHeader';
 
 export function LegalPage({
   title,
@@ -7,20 +7,19 @@ export function LegalPage({
   children,
 }: {
   title: string;
+  /** Date de dernière mise à jour, en toutes lettres. */
   updated: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-20">
-      <header className="relative flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 mb-14">
-        <Split as="h1" text={title} step={90} className="block font-serif text-5xl md:text-7xl leading-none tracking-tight" />
-        <span className="absolute inset-x-0 bottom-0 h-px bg-ink origin-left animate-[grow_1.4s_var(--ease-io)_both] [animation-delay:calc(var(--intro)+150ms)]" />
-        <p className="kicker text-muted animate-rise [--d:400ms]">Mise à jour : {updated}</p>
-      </header>
+    <article className="max-w-7xl mx-auto px-5 md:px-10 py-14 md:py-20">
+      <PageHeader title={title}>
+        <p className="kicker">Mise à jour : {updated}</p>
+      </PageHeader>
       <div className="max-w-3xl space-y-12 text-[15px] leading-relaxed" data-stagger="up">
         {children}
       </div>
-    </div>
+    </article>
   );
 }
 

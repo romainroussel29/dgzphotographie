@@ -1,7 +1,7 @@
 import type { CSSProperties, ElementType } from 'react';
 
-type SplitProps = {
-  /** Texte à animer. Un mot entouré de `_` est mis en italique : « Le portrait _juste_ ». */
+type SplitTextProps = {
+  /** Texte à animer. Un mot entouré de `_` est mis en italique : « Le portrait _authentique_ ». */
   text: string;
   as?: ElementType;
   className?: string;
@@ -19,7 +19,7 @@ type SplitProps = {
  * Titre animé mot par mot : chaque mot remonte depuis un masque.
  * Le texte complet reste lisible par les lecteurs d'écran.
  */
-export default function Split({
+export default function SplitText({
   text,
   as: Tag = 'span',
   className = '',
@@ -27,7 +27,7 @@ export default function Split({
   letters = false,
   delay = 0,
   step,
-}: SplitProps) {
+}: SplitTextProps) {
   const words = text.split(' ').map((raw) => {
     const m = raw.match(/^_(.+)_(.*)$/);
     return m ? { italic: m[1], rest: m[2] } : { italic: '', rest: raw };

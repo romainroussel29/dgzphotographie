@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { LegalPage, Section } from '@/app/components/Legal';
-import { EMAIL, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_LINK } from '@/lib/contact';
+import { LegalPage, Section } from '@/components/legal/LegalPage';
+import { EMAIL, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_LINK } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Mentions légales',
