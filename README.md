@@ -41,6 +41,20 @@ La clé « anon » est publique par nature ; la sécurité des données repose s
 Le fichier [`public/.htaccess`](public/.htaccess) configure Apache : compression, cache navigateur, page 404 et en-têtes de sécurité.
 La redirection vers HTTPS y est prête mais commentée : à activer une fois le certificat SSL actif chez OVH.
 
+Tout ce qui doit être en ligne est dans `out/` : `public/` y est copié tel quel, y compris `.htaccess` et `contact.php`.
+
+## Formulaire de contact
+
+Le formulaire (`components/contact/ContactForm.tsx`) envoie ses champs à [`public/contact.php`](public/contact.php),
+exécuté par le PHP de l'hébergement OVH, qui transmet le message par e-mail :
+
+- destinataire : `RECIPIENT` dans `contact.php` (même adresse que `EMAIL` dans `lib/site.ts`) ;
+- expéditeur technique `contact@dgzphotographie.fr`, « Répondre » renvoie vers le visiteur ;
+- anti-spam : champ piège invisible et délai minimal de 3 secondes avant l'envoi.
+
+En local, `npm run dev` ne sait pas exécuter de PHP : le formulaire y affiche une erreur, c'est normal.
+Pour tester le script : `npm run build`, puis `php -S 127.0.0.1:8000` dans le dossier `out/`.
+
 ## Organisation du code
 
 ```
@@ -131,5 +145,4 @@ Titres animés mot par mot : `<SplitText text="Le portrait _authentique_" />` (l
 ## Points en attente
 
 - **Connexion admin simulée** (`app/admin/login`) : identifiants en dur et tableau de bord non protégé. À remplacer par Supabase Auth.
-- **Formulaire de contact** non relié : aucun message n'est envoyé (voir `components/contact/ContactForm.tsx`).
 - Mentions légales : informations surlignées à compléter.
