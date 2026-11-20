@@ -29,28 +29,57 @@ export default function Motion() {
 
     /* --- Apparitions au défilement --- */
     const seen = new WeakSet<Element>();
+    // Élément surveillé → éléments à révéler quand il entre dans l'écran.
+    const targetsOf = new Map<Element, HTMLElement[]>();
+
     const io = new IntersectionObserver(
       (entries) => {
-        const visible = entries
+        const toReveal = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left);
-        visible.forEach((e, k) => {
-          const el = e.target as HTMLElement;
+          .flatMap((e) => {
+            io.unobserve(e.target);
+            const targets = targetsOf.get(e.target) ?? [];
+            targetsOf.delete(e.target);
+            return targets;
+          })
+          .map((el) => ({ el, rect: el.getBoundingClientRect() }))
+          .sort((a, b) => a.rect.top - b.rect.top || a.rect.left - b.rect.left);
+
+        toReveal.forEach(({ el }, k) => {
           // Les éléments qui entrent ensemble apparaissent en cascade.
           el.style.setProperty('--io-d', `${Math.min(k, 8) * 90}ms`);
           el.classList.add('is-in');
-          io.unobserve(el);
         });
       },
       { rootMargin: '0px 0px -8% 0px' },
     );
 
+    /**
+     * Les effets « clip », « sign » et « line » masquent l'élément (clip-path, échelle nulle) :
+     * le navigateur le considère alors comme invisible et ne le signalerait jamais.
+     * On surveille donc son parent, qui lui n'est pas masqué.
+     */
+    const watchedElementFor = (el: Element) => {
+      const variant = el.getAttribute('data-reveal') ?? el.parentElement?.getAttribute('data-stagger');
+      const masked = variant === 'clip' || variant === 'sign' || variant === 'line';
+      return masked && el.parentElement && !el.parentElement.hasAttribute('data-stagger') ? el.parentElement : el;
+    };
+
     const scan = () => {
-      document.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
+      document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR).forEach((el) => {
         if (seen.has(el)) return;
         seen.add(el);
-        if (reduce) el.classList.add('is-in');
-        else io.observe(el);
+        if (reduce) {
+          el.classList.add('is-in');
+          return;
+        }
+        const watched = watchedElementFor(el);
+        const targets = targetsOf.get(watched);
+        if (targets) targets.push(el);
+        else {
+          targetsOf.set(watched, [el]);
+          io.observe(watched);
+        }
       });
     };
 

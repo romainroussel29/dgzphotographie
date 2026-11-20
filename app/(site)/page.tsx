@@ -2,6 +2,7 @@ import Image from 'next/image';
 import InstagramIcon from '@/components/ui/InstagramIcon';
 import ButtonLink from '@/components/ui/ButtonLink';
 import SplitText from '@/components/motion/SplitText';
+import PortraitSelection from '@/components/home/PortraitSelection';
 import {
   EMAIL,
   INSTAGRAM_HANDLE,
@@ -97,6 +98,9 @@ export default function HomePage() {
           </div>
         ))}
       </div>
+
+      {/* Sélection de portraits */}
+      <PortraitSelection />
 
       {/* Présentation */}
       <section aria-labelledby="titre-approche" className="border-b border-ink bg-paper-deep overflow-hidden">
