@@ -1,0 +1,67 @@
+@use '../base/variables' as *;
+
+// Services, séance portrait et à propos.
+.intro-split {
+  @include columns-12;
+  gap: 2.5rem;
+  align-items: center;
+
+  &__image {
+    @include from($md) {
+      grid-column: span 5 / span 5;
+    }
+
+    .photo {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  &__text {
+    line-height: 1.625;
+    @include stack(1.25rem);
+
+    @include from($md) {
+      grid-column: 7 / span 6;
+    }
+
+    .lead {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.875rem;
+      line-height: 1.3;
+
+      @include from($md) {
+        font-size: 2.25rem;
+      }
+    }
+
+    .button {
+      margin-top: 1rem;
+    }
+  }
+}
+
+.services {
+  display: grid;
+  gap: 1.5rem;
+
+  @include from($lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.content-block {
+  margin-top: 5rem;
+
+  @include from($md) {
+    margin-top: 7rem;
+  }
+}
+
+.content-action {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 4rem;
+}

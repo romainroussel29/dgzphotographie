@@ -1,0 +1,95 @@
+@use '../base/variables' as *;
+
+.guestbook {
+  @include columns-12;
+  gap: 3.5rem;
+
+  @include from($md) {
+    gap: 2.5rem;
+  }
+
+  &__messages {
+    order: 2;
+
+    @include from($md) {
+      grid-column: span 8 / span 8;
+      order: 1;
+    }
+
+    > h2 {
+      margin-bottom: 2rem;
+      color: var(--muted);
+    }
+  }
+
+  &__empty {
+    padding-block: 4rem;
+    border: 1px dashed var(--line);
+    color: var(--muted);
+    text-align: center;
+  }
+
+  &__list {
+    column-gap: 1.5rem;
+
+    @include from($sm) {
+      columns: 2;
+    }
+  }
+
+  &__aside {
+    order: 1;
+
+    @include from($md) {
+      grid-column: span 4 / span 4;
+      order: 2;
+
+      > div {
+        position: sticky;
+        top: 2rem;
+      }
+    }
+
+    > div {
+      --d: 300ms;
+    }
+  }
+
+  &__invite {
+    padding: 1.5rem;
+    border: 1px solid var(--ink);
+
+    @include from($md) {
+      padding: 2rem;
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+
+    p {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.625;
+    }
+
+    .button {
+      margin-top: 1.5rem;
+    }
+  }
+
+  &__note {
+    color: var(--muted);
+
+    &:last-child {
+      font-size: 0.75rem;
+    }
+
+    span {
+      display: block;
+      overflow-wrap: break-word;
+    }
+  }
+}

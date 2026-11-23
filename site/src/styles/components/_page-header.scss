@@ -1,0 +1,65 @@
+@use '../base/variables' as *;
+
+.page-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 3.5rem;
+
+  @include from($md) {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  h1 {
+    display: block;
+    font-family: var(--serif);
+    font-size: 3.75rem;
+    line-height: 1;
+    letter-spacing: -0.025em;
+
+    @include from($md) {
+      font-size: 6rem;
+    }
+  }
+
+  // Titre d'un seul long mot (« Confidentialité »).
+  &--long {
+    @media (max-width: 63.99rem) {
+      flex-direction: column;
+      align-items: flex-start;
+
+      h1 {
+        font-size: clamp(2rem, 12.3vw, 5rem);
+      }
+
+      .page-header__intro {
+        text-align: left;
+      }
+    }
+  }
+
+  &__intro {
+    max-width: 24rem;
+    font-size: 0.875rem;
+    line-height: 1.4286;
+    color: var(--muted);
+
+    @include from($md) {
+      text-align: right;
+    }
+  }
+
+  &__rule {
+    position: absolute;
+    inset: auto 0 0;
+    height: 1px;
+    background: var(--ink);
+    transform-origin: left;
+    animation: grow 1.4s var(--ease-io) both;
+    animation-delay: calc(var(--intro) + 150ms);
+  }
+}

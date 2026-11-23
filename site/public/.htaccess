@@ -1,0 +1,73 @@
+# DGZ Photographie — configuration Apache (hébergement mutualisé OVH).
+# Source : site/public/.htaccess, recopié dans public/ par npm run build.
+
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # --- HTTPS et adresse sans www ---
+  RewriteCond %{SERVER_PORT} ^80$
+  RewriteRule ^ https://dgzphotographie.fr%{REQUEST_URI} [R=301,L]
+  RewriteCond %{HTTP_HOST} ^www\.dgzphotographie\.fr$ [NC]
+  RewriteRule ^ https://dgzphotographie.fr%{REQUEST_URI} [R=301,L]
+
+  # --- Ancien espace d'administration : bloqué même si ses fichiers sont restés sur le serveur ---
+  # (/_next/ n'est pas bloqué : le CSS et le JavaScript du site y sont.)
+  RewriteRule ^(admin|_not-found)(/|$) - [NC,G,L]
+
+  # --- Anciennes adresses ---
+  RewriteRule ^confidentialite(/.*)?$ /politique-confidentialite/ [R=301,L]
+  RewriteRule ^galerie/(voir|portraits)(/.*)?$ /galerie/ [R=301,L,QSD]
+  RewriteRule ^og-image\.jpg$ /assets/img/partage-dgz-photographie.jpg [R=301,L]
+  RewriteRule ^images/portraits/portrait-01\.webp$ /assets/img/portrait-noir-blanc-mains-visage.webp [R=301,L]
+  RewriteRule ^images/portraits/portrait-02\.webp$ /assets/img/portrait-noir-blanc-grand-sourire.webp [R=301,L]
+  RewriteRule ^images/portraits/portrait-03\.webp$ /assets/img/portrait-noir-blanc-crochet.webp [R=301,L]
+  RewriteRule ^images/portraits/portrait-04\.webp$ /assets/img/portrait-noir-blanc-lunettes.webp [R=301,L]
+  RewriteRule ^images/portraits/portrait-05\.webp$ /assets/img/portrait-noir-blanc-enfant-fenetre.webp [R=301,L]
+  RewriteRule ^images/portrait-dgz\.webp$ /assets/img/autoportrait-photographe-dgz.webp [R=301,L]
+  RewriteRule ^images/logo-dgz\.webp$ /assets/img/logo-dgz-photographie.webp [R=301,L]
+</IfModule>
+
+# --- Compression ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/manifest+json application/xml text/xml image/svg+xml
+</IfModule>
+
+# --- Types de fichiers ---
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType image/svg+xml .svg
+  AddType font/woff2 .woff2
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+# --- Cache et sécurité ---
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Pages, CSS et JS : revalidés, pour qu'une mise en ligne soit visible immédiatement.
+  <FilesMatch "\.(html|css|js|txt|xml|webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+
+  # Images : 30 jours. Pour remplacer une photo, lui donner un nouveau nom.
+  <FilesMatch "\.(webp|png|jpe?g|svg|ico)$">
+    Header set Cache-Control "public, max-age=2592000, stale-while-revalidate=604800"
+  </FilesMatch>
+
+  # Fichiers de Next.js : leur nom change à chaque compilation, cache d'un an.
+  <If "%{REQUEST_URI} =~ m#^/_next/static/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+
+  # Polices : un an.
+  <FilesMatch "\.woff2$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

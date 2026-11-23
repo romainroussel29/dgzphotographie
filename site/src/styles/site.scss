@@ -1,0 +1,7 @@
+// Design du site (feuilles listées dans main.scss), rangé dans la couche CSS « site ».
+// Les couches sont ordonnées dans globals.css : une classe Tailwind posée sur un élément l'emporte sur ce design.
+@use 'sass:meta';
+
+@layer site {
+  @include meta.load-css('main');
+}

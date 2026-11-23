@@ -1,0 +1,101 @@
+// Soulignement qui se dessine de gauche à droite.
+.link-draw {
+  padding-bottom: 2px;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-size: 0% 1px;
+  transition:
+    background-size 0.6s var(--ease-out),
+    color 0.3s;
+
+  &:hover,
+  &[aria-current] {
+    background-position: 0 100%;
+    background-size: 100% 1px;
+  }
+}
+
+.link-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.link-underline {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+// Bouton : le remplissage monte depuis le bas.
+.button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.75rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  transition: color 0.5s var(--ease-out);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--paper);
+    border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+    transform: translateY(101%);
+    transition:
+      transform 0.6s var(--ease-io),
+      border-radius 0.6s var(--ease-io);
+  }
+
+  &:hover {
+    color: var(--ink);
+
+    &::before {
+      transform: translateY(0);
+      border-radius: 0;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &--compact {
+    padding-inline: 1.5rem;
+  }
+
+  &--block {
+    width: 100%;
+  }
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.5s var(--ease-out);
+}
+
+:is(a, button):hover > .arrow {
+  transform: translateX(6px);
+}
+
+:is(a, button):hover > .arrow--back {
+  transform: translateX(-6px);
+}
+
+[data-magnetic] {
+  transition: translate 0.6s var(--ease-out);
+}

@@ -1,0 +1,109 @@
+@use '../base/variables' as *;
+
+.contact-form {
+  padding: 1.5rem;
+  background: var(--paper-deep);
+  @include stack(1.5rem);
+
+  @include from($md) {
+    padding: 2.5rem;
+  }
+
+  // Champ anti-spam, invisible pour les visiteurs.
+  &__trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  &__row {
+    display: grid;
+    gap: 1.5rem;
+
+    @include from($sm) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+
+    span {
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: 400;
+      color: var(--muted);
+    }
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    transition: border-color 0.15s;
+
+    &::placeholder {
+      color: var(--muted);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--ink);
+    }
+  }
+
+  &__error {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--error);
+    color: var(--error);
+    font-size: 0.875rem;
+    line-height: 1.4286;
+  }
+
+  &__note {
+    font-size: 0.75rem;
+    line-height: 1.625;
+    color: var(--muted);
+
+    a:hover {
+      color: var(--ink);
+    }
+  }
+}
+
+.contact-success {
+  padding: 2.5rem;
+  background: var(--ink);
+  color: var(--paper);
+
+  @include from($md) {
+    padding: 4rem;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  p {
+    max-width: 28rem;
+    margin-top: 1.5rem;
+    line-height: 1.625;
+    color: rgb(255 255 255 / 70%);
+  }
+
+  .button {
+    margin-top: 2.5rem;
+    padding: 0.75rem 1.25rem;
+    border-color: rgb(255 255 255 / 40%);
+  }
+}

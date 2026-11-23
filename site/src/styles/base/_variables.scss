@@ -1,0 +1,35 @@
+// Points de rupture et outils Sass.
+$sm: 40rem;
+$md: 48rem;
+$lg: 64rem;
+$xl: 80rem;
+
+@mixin from($width) {
+  @media (min-width: $width) {
+    @content;
+  }
+}
+
+// Survol : uniquement avec une souris.
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// Espace entre les enfants directs.
+@mixin stack($space) {
+  > :not(:last-child) {
+    margin-bottom: $space;
+  }
+}
+
+@mixin columns-12 {
+  display: grid;
+
+  @include from($md) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}

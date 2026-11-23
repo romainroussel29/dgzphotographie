@@ -1,0 +1,34 @@
+/*
+ * Ordre de priorité, du plus faible au plus fort :
+ * thème Tailwind → design du site (site.scss) → classes utilitaires Tailwind.
+ * Pas de « preflight » Tailwind : la remise à zéro est faite par base/_reset.scss.
+ */
+@layer theme, site, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+
+/* Fichiers où Tailwind cherche les classes utilisées (dossier site/src). */
+@source '../';
+
+/* Couleurs, polices et courbes du site utilisables en Tailwind : bg-paper, text-ink, font-serif, ease-out… */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-error: var(--error);
+  --font-sans: var(--sans);
+  --font-serif: var(--serif);
+  --ease-out: var(--ease-out);
+  --ease-io: var(--ease-io);
+}
+
+/* La classe « container » est celle du site (layout/_grid.scss) : Tailwind ne génère pas la sienne. */
+@source not inline('container');
+
+/* Transition animée entre les pages (ignorée par les navigateurs qui ne la gèrent pas). */
+@view-transition {
+  navigation: auto;
+}

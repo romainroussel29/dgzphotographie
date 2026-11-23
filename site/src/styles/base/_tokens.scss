@@ -1,0 +1,22 @@
+// Couleurs, polices et courbes d'animation : à modifier ici.
+:root {
+  --paper: #f3f0ea;
+  --paper-deep: #e9e4da;
+  --ink: #141414;
+  --muted: #615d57;
+  --line: #d6d0c4;
+  --error: #9f0712;
+
+  --sans: 'Manrope', 'Manrope Fallback', ui-sans-serif, system-ui, sans-serif;
+  --serif: 'Bodoni Moda', 'Bodoni Moda Fallback', ui-serif, Georgia, serif;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+
+  // Délai laissé au rideau d'introduction (0 quand il ne joue pas).
+  --intro: 0s;
+}
+
+html[data-intro='play']:has(.intro) {
+  --intro: 1.55s;
+}
