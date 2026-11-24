@@ -25,6 +25,16 @@
   display: flex;
   justify-content: space-between;
   margin-top: 0.75rem;
+
+  // Crédit photo : texte et lien côte à côte, alignés à droite.
+  &--credit {
+    justify-content: flex-end;
+    gap: 0.35em;
+
+    a {
+      color: var(--ink);
+    }
+  }
 }
 
 // Photo recadrée qui remplit son cadre.

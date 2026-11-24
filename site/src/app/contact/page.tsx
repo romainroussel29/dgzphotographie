@@ -46,7 +46,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <dt className="kicker muted">Lieu</dt>
-                <dd>Marseille &amp; alentours</dd>
+                <dd>Marseille &amp; alentours, studio nomade : je me déplace où vous voulez</dd>
               </div>
               <div>
                 <dt className="kicker muted">Spécialité</dt>

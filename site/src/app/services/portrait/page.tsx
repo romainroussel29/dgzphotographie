@@ -7,7 +7,7 @@ import { breadcrumb, pageMetadata } from '@/lib/metadata';
 export const metadata = pageMetadata({
   title: 'Séance photo portrait à Marseille | DGZ',
   description:
-    'Séance portrait en noir et blanc à Marseille et alentours, pour artistes, comédiens, musiciens, créateurs, professionnels et particuliers.',
+    'Séance portrait en noir et blanc à Marseille et alentours, avec un mini studio nomade qui se déplace où vous voulez, pour artistes, comédiens, musiciens, créateurs, professionnels et particuliers.',
   path: '/services/portrait/',
 });
 
@@ -29,7 +29,7 @@ export default function PortraitSessionPage() {
         )}
       />
       <PageHeader title="Séance _portrait_">
-        <p>Portrait noir et blanc, à Marseille et alentours.</p>
+        <p>Portrait noir et blanc, à Marseille et alentours, avec un studio nomade.</p>
       </PageHeader>
 
       <section className="intro-split" aria-label="La séance portrait">
@@ -51,6 +51,11 @@ export default function PortraitSessionPage() {
           <p>
             Basé à Marseille, je photographie artistes, comédiens, musiciens, créateurs et professionnels, ainsi que
             toute personne qui souhaite se reconnaître dans une image.
+          </p>
+          <p>
+            Je travaille avec un mini studio portable et nomade : fond, lumières, tout voyage avec moi. Chez vous, sur
+            votre lieu de travail, en extérieur ou dans un endroit qui vous ressemble, je réalise vos portraits là où
+            vous le souhaitez.
           </p>
           <p>
             Je privilégie des portraits sincères et naturels, nés de l&apos;échange, de la confiance et de la

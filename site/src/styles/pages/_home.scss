@@ -103,15 +103,12 @@
     }
 
     figcaption {
-      position: absolute;
-      left: -0.75rem;
-      top: 1.5rem;
-      writing-mode: vertical-rl;
-      rotate: 180deg;
+      margin-top: 0.875rem;
+      text-align: right;
       color: var(--muted);
 
-      @include from($md) {
-        left: -2.5rem;
+      a {
+        color: var(--ink);
       }
     }
   }

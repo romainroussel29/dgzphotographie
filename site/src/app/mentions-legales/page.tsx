@@ -84,6 +84,19 @@ export default function LegalNoticePage() {
           </div>
         </section>
         <section>
+          <h2>Crédits photographiques</h2>
+          <div>
+            <p>
+              Portrait de Didier Garnier (page d&apos;accueil et page À propos) :{' '}
+              <strong>Studio Clotis</strong>, Marseille —{' '}
+              <a href="https://studio-clotis.com/" target="_blank" rel="noopener">
+                studio-clotis.com<span className="sr-only"> (nouvel onglet)</span>
+              </a>
+              . Toutes les autres photographies sont de DGZ Photographie.
+            </p>
+          </div>
+        </section>
+        <section>
           <h2>Droit à l&apos;image</h2>
           <div>
             <p>

@@ -114,12 +114,15 @@ export default function HomePage() {
                     width={1100}
                     height={1375}
                     fetchPriority="high"
-                    alt="Autoportrait du photographe DGZ derrière son appareil photo"
+                    alt="Portrait du photographe DGZ derrière son appareil photo, réalisé par le Studio Clotis"
                   />
                 </div>
               </div>
               <figcaption className="kicker animate-rise" style={cssVars({ '--d': '900ms' })}>
-                Autoportrait — Marseille
+                Photo :{' '}
+                <a className="link-draw" href="https://studio-clotis.com/" target="_blank" rel="noopener">
+                  Studio Clotis, Marseille<span className="sr-only"> (nouvel onglet)</span>
+                </a>
               </figcaption>
             </div>
           </figure>
@@ -233,6 +236,10 @@ export default function HomePage() {
             <p>
               Basé à Marseille, je photographie artistes, comédiens, musiciens, créateurs et professionnels, ainsi
               que toute personne qui souhaite se reconnaître dans une image.
+            </p>
+            <p>
+              Je travaille avec un mini studio portable et nomade : je réalise vos portraits où vous le souhaitez,
+              chez vous, sur votre lieu de travail ou en extérieur.
             </p>
             <p className="kicker">L&apos;authenticité avant tout.</p>
           </div>

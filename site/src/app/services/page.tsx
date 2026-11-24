@@ -26,7 +26,8 @@ export default function ServicesPage() {
           </h2>
           <p>
             Des portraits sincères et naturels en noir et blanc, pour artistes, comédiens, musiciens, créateurs,
-            professionnels et toute personne qui souhaite se reconnaître dans une image.
+            professionnels et toute personne qui souhaite se reconnaître dans une image. Grâce à mon mini studio
+            portable, la séance se fait où vous le souhaitez.
           </p>
           <a className="kicker" href="/services/portrait/">
             Découvrir la séance <Arrow />

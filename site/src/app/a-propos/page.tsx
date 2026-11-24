@@ -29,9 +29,15 @@ export default function AboutPage() {
               width={1100}
               height={1375}
               fetchPriority="high"
-              alt="Autoportrait de Didier Garnier derrière son appareil photo"
+              alt="Portrait de Didier Garnier derrière son appareil photo, réalisé par le Studio Clotis"
             />
           </div>
+          <p className="photo-caption photo-caption--credit kicker muted">
+            Photo :{' '}
+            <a className="link-draw" href="https://studio-clotis.com/" target="_blank" rel="noopener">
+              Studio Clotis, Marseille<span className="sr-only"> (nouvel onglet)</span>
+            </a>
+          </p>
         </div>
         <div className="intro-split__text" data-stagger="up">
           <p className="lead">{QUOTE}</p>
@@ -47,6 +53,11 @@ export default function AboutPage() {
           <p>
             Basé à Marseille, je photographie artistes, comédiens, musiciens, créateurs et professionnels, ainsi que
             toute personne qui souhaite se reconnaître dans une image.
+          </p>
+          <p>
+            Je travaille avec un mini studio portable et nomade : fond, lumières, tout voyage avec moi. Chez vous, sur
+            votre lieu de travail, en extérieur ou dans un endroit qui vous ressemble, je réalise vos portraits là où
+            vous le souhaitez.
           </p>
           <p className="kicker">L&apos;authenticité avant tout.</p>
         </div>
