@@ -64,7 +64,7 @@ export default function PrivacyPage() {
           <div>
             <p>
               Les données sont destinées à DGZ Photographie et, pour la maintenance du site et la publication du livre
-              d&apos;or, à son prestataire Phénix &lt;dev/&gt;. Elles transitent par des prestataires techniques : OVH
+              d&apos;or, à son prestataire Roussel Dev. Elles transitent par des prestataires techniques : OVH
               SAS (hébergement du site, en France) et Google (messagerie Gmail). Google peut traiter des données hors de
               l&apos;Union européenne ; ces transferts sont encadrés par les garanties prévues par le RGPD.
             </p>

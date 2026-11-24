@@ -50,8 +50,8 @@ export default function Footer() {
             <p>© {new Date().getFullYear()} {SITE_NAME}</p>
             <p className="site-footer__credit">
               Site réalisé par{' '}
-              <a className="link-draw" href="https://www.phenixdev.fr/" target="_blank" rel="nofollow noopener">
-                Phénix &lt;dev/&gt; <span aria-hidden="true">↗</span>
+              <a className="link-draw" href="https://roussel-dev.fr/" target="_blank" rel="nofollow noopener">
+                Roussel Dev <span aria-hidden="true">↗</span>
                 <span className="sr-only"> (nouvel onglet)</span>
               </a>
             </p>

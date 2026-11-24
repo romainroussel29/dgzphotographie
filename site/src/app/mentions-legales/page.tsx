@@ -44,12 +44,12 @@ export default function LegalNoticePage() {
           <h2>Conception du site</h2>
           <div>
             <p>
-              <strong>Phénix &lt;dev/&gt;</strong>
+              <strong>Roussel Dev</strong>
               <br />
               Romain Roussel
               <br />
-              <a href="https://www.phenixdev.fr/" target="_blank" rel="nofollow noopener">
-                phenixdev.fr<span className="sr-only"> (nouvel onglet)</span>
+              <a href="https://roussel-dev.fr/" target="_blank" rel="nofollow noopener">
+                roussel-dev.fr<span className="sr-only"> (nouvel onglet)</span>
               </a>
             </p>
           </div>
