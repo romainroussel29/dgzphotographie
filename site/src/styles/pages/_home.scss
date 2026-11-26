@@ -119,12 +119,9 @@
     margin-inline: auto;
   }
 
+  // Photo affichée en entière (pas de zoom ni de parallaxe) pour garder la signature du Studio Clotis.
   &__mask {
     overflow: hidden;
-
-    > div {
-      scale: 110%;
-    }
 
     img {
       width: 100%;

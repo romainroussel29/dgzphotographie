@@ -105,7 +105,7 @@ export default function HomePage() {
           <figure className="hero__portrait">
             <div className="hero__frame">
               <div className="hero__mask animate-unveil">
-                <div data-parallax="-0.06">
+                <div>
                   <img
                     className="animate-settle"
                     src="/assets/img/autoportrait-photographe-dgz.webp"

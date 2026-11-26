@@ -5,9 +5,9 @@ import { QUOTE } from '@/config/site';
 import { breadcrumb, pageMetadata } from '@/lib/metadata';
 
 export const metadata = pageMetadata({
-  title: 'Didier Garnier, photographe à Marseille | DGZ',
+  title: 'Didier Zolezzi, photographe à Marseille | DGZ',
   description:
-    'Didier Garnier, DGZ Photographie : photographe portraitiste à Marseille, pour des portraits authentiques en noir et blanc.',
+    'Didier Zolezzi, DGZ Photographie : photographe portraitiste à Marseille, pour des portraits authentiques en noir et blanc.',
   path: '/a-propos/',
 });
 
@@ -16,7 +16,7 @@ export default function AboutPage() {
     <div className="page container">
       <JsonLd data={breadcrumb({ name: 'À propos', path: '/a-propos/' })} />
       <PageHeader title="À _propos_">
-        <p>Didier Garnier, photographe portraitiste à Marseille.</p>
+        <p>Didier Zolezzi, photographe portraitiste à Marseille.</p>
       </PageHeader>
 
       <section className="intro-split" aria-label="Présentation">
@@ -29,7 +29,7 @@ export default function AboutPage() {
               width={1100}
               height={1375}
               fetchPriority="high"
-              alt="Portrait de Didier Garnier derrière son appareil photo, réalisé par le Studio Clotis"
+              alt="Portrait de Didier Zolezzi derrière son appareil photo, réalisé par le Studio Clotis"
             />
           </div>
           <p className="photo-caption photo-caption--credit kicker muted">

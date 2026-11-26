@@ -29,7 +29,7 @@ export default function LegalNoticePage() {
             <p>
               <strong>DGZ Photographie</strong>
               <br />
-              Didier Garnier
+              Didier Zolezzi
               <br />
               TVA non applicable, art. 293 B du CGI
               <br />
@@ -37,7 +37,7 @@ export default function LegalNoticePage() {
               <br />
               Email : <Mail />
             </p>
-            <p>Directeur de la publication : Didier Garnier</p>
+            <p>Directeur de la publication : Didier Zolezzi</p>
           </div>
         </section>
         <section>
@@ -87,7 +87,7 @@ export default function LegalNoticePage() {
           <h2>Crédits photographiques</h2>
           <div>
             <p>
-              Portrait de Didier Garnier (page d&apos;accueil et page À propos) :{' '}
+              Portrait de Didier Zolezzi (page d&apos;accueil et page À propos) :{' '}
               <strong>Studio Clotis</strong>, Marseille —{' '}
               <a href="https://studio-clotis.com/" target="_blank" rel="noopener">
                 studio-clotis.com<span className="sr-only"> (nouvel onglet)</span>

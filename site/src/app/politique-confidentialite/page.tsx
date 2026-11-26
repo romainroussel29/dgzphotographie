@@ -28,7 +28,7 @@ export default function PrivacyPage() {
           <h2>Responsable du traitement</h2>
           <div>
             <p>
-              DGZ Photographie — Didier Garnier
+              DGZ Photographie — Didier Zolezzi
               <br />
               Contact : <Mail />
             </p>
